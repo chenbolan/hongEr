@@ -1,0 +1,130 @@
+.he-header {
+  & {
+    height: 82px;
+    background: #0160B0;
+    color: #fff;
+    overflow: hidden;
+    width: 100%;
+  }
+  .menu-con {
+    width: 330px;
+  }
+  .header-title-con {
+    div {
+      h1, h2 {
+        color: #fff;
+        text-align: left;
+      }
+      h1 {
+        font-size: 16px;
+        line-height: 22px;
+        font-weight: bold;
+      }
+      h2 {
+        font-size: 12px;
+        line-height: 17px;
+        margin-top: 3px;
+      }
+    }
+    .icon-con {
+      width: 138px;
+      height: 30px;
+      display: inline-block;
+      background: #fff;
+      margin-right: 30px;
+    }
+  }
+
+  .ant-menu {
+    &{
+      background: transparent;
+    }
+    &.ant-menu-horizontal {
+      border: none;
+    }
+    li {
+      color: #fff;
+    }
+  }
+  .ant-menu-horizontal > .ant-menu-item, .ant-menu-horizontal > .ant-menu-submenu {
+    border-bottom: none;
+    font-size: 20px;
+    font-family: PingFangSC-Semibold;
+    height: 82px;
+    line-height: 80px;
+    box-sizing: border-box;
+    padding: 0 15px;
+  }
+  .ant-menu-horizontal > .ant-menu-item:hover {
+    color: #fff;
+    font-weight: bold;
+  }
+  .ant-menu-horizontal > .ant-menu-item-selected {
+    color: #fff;
+    font-weight: bold;
+    border-top: 2px solid #FFCC00 ;
+  }
+
+  .language-con {
+    font-size: 20px;
+    margin-left: 10px;
+    cursor: pointer;
+  }
+
+  .login-con {
+    font-size: 20px;
+    margin-left: 10px;
+    cursor: pointer;
+    font-weight: bold;
+  }
+}
+@media screen and (max-width: 1000px){
+  .he-header {
+    .menu-con {
+      width: 200px;
+    }
+  }
+
+}
+@media screen and (max-width: 850px){
+  .he-header {
+    .header-title-con {
+      div div {
+        display: none;
+      }
+    }
+  }
+}
+@media screen and (max-width: 550px){
+  .he-header {
+    .menu-con {
+      width: 60px;
+    }
+  }
+  .he-header {
+    .header-title-con {
+      div div {
+        display: none;
+      }
+    }
+  }
+}
+@media screen and (max-width: 400px){
+  .he-header {
+    .menu-con {
+      width: 60px;
+    }
+  }
+  .he-header {
+    .header-title-con {
+      div div {
+        display: none;
+      }
+      .icon-con {
+        width: 92px;
+        height: 20px;
+      }
+    }
+
+  }
+}

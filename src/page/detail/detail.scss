@@ -1,0 +1,123 @@
+.detail-page {
+  .detail-title {
+    & {
+      text-align: left;
+      vertical-align: middle;
+      margin-top: 22px;
+      margin-bottom: 34px;
+    }
+    .icon-detail {
+      width: 96px;
+      height: 20px;
+      background: #aaa;
+      display: inline-block;
+      vertical-align: middle;
+    }
+    h1 {
+      font-size: 14px;
+      line-height: 20px;
+      color: #0160B0;
+      font-weight: bold;
+      display: inline-block;
+      vertical-align: middle;
+      margin: 0;
+    }
+    span {
+      display: inline-block;
+      height: 10px;
+      border-left: 1px solid #FFCC00;
+      margin: 0 10px;
+    }
+  }
+  .detail-con {
+    & {
+      flex-wrap: wrap;
+    }
+    .button-group-con button{
+      margin-right: 10px;
+    }
+    .ant-btn:active {
+      font-weight: bold;
+    }
+    .product-introduce {
+      margin-top: 30px;
+      align-items: start;
+    }
+    .resource-con {
+      text-align: left;
+      width: 60%;
+      margin-left: 6%;
+    }
+    .product_name {
+      font-size: 20px;
+      color: #404040;
+      line-height: 20px;
+      margin-bottom: 13px;
+    }
+    .right-btn {
+      background: #0160B0;
+      color: #fff;
+      border-color: #0160B0;
+    }
+    .j-link-con {
+      button{
+        margin-left: 20px;
+        box-shadow: 0 2px 8px 0 rgba(0,0,0,0.10);
+      }
+    }
+    .resource-con>div {
+      img {
+        width: 100%;
+      }
+      video {
+        width: 100%;
+      }
+      flex: 1;
+      width: 80%;
+      margin: 0 20px;
+    }
+  }
+  .resource-introduce {
+    text-align: center;
+    font-size: 14px;
+    color: #404040;
+    line-height: 24px;
+    font-weight: normal;
+    margin-top: 10px;
+  }
+  @media screen  and (max-width: 1200px){
+    .detail-con .j-link-con {
+      button{
+        margin-left: 10px;
+      }
+    }
+  }
+  @media screen  and (max-width: 1100px){
+    .toggle-btn-con {
+      display: block;
+    }
+    & .detail-con div.j-link-con {
+      & {
+        display: block;
+        margin-top: 10px;
+        margin-bottom: 20px;
+      }
+      button{
+        margin-left: 0px;
+        margin-right: 10px;
+      }
+    }
+  }
+  @media screen  and (max-width: 750px){
+    .product-introduce {
+      display: block;
+    }
+    .detail-con .resource-con {
+      margin: 0 auto;
+      width: 100%;
+    }
+  }
+}
+
+
+

@@ -1,25 +1,41 @@
 import React from 'react';
-import logo from './logo.svg';
+import {Route, Redirect, Switch} from 'react-router-dom';
+
 import './App.css';
+import './login-reg.scss';
+import HomePage from './page/homePage';
+import Detail from './page/detail';
+
+import {HongErHeader} from './HE-ui';
+import {Layout} from 'antd'
+const { Header, Footer, Content } = Layout;
+
+declare global {
+  interface Window {
+    headerRef: any;
+  }
+}
+
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Layout className="App">
+      <Header>
+        <HongErHeader ref={(ref) => {window.headerRef = ref}}/>
+      </Header>
+      <Content>
+        <Switch>
+          <Route exact path='/' component={HomePage}/>
+          <Route path='/Detail' component={Detail}/>
+          <Redirect to='/' />
+        </Switch>
+      </Content>
+      <Footer>
+      <footer>
+        <p>技术支持：北京汇展信息技术有限公司    ICP备：88888</p>
+      </footer>
+      </Footer>
+    </Layout>
   );
 }
 

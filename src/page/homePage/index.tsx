@@ -1,0 +1,55 @@
+import * as React from "react";
+import './homePage.scss'
+import {Post}  from '../../request';
+import { message } from 'antd';
+interface Props {}
+interface State {
+  isHome: boolean;
+}
+
+export default class HomePage extends React.Component<Props, State> {
+  constructor(props: any){
+    super(props);
+    this.state={
+      isHome: false
+    }
+  }
+
+  componentDidMount(){
+    this.initMap();
+  }
+
+  initMap = () => {
+    Post('/boothLayout/json', {
+        "id":15
+    },function(data: any){
+      if (data.code === 200) {
+        let layoutId, upLoadShowUrl;
+        layoutId=data.data.layoutId;
+        var exhibitionDesc = data.data.exhibitionDesc;
+        var sponsorUrl = data.data.sponsorUrl;
+        $("#wordpress").html('<strong>主办方链接</strong> ' + sponsorUrl);
+        $("#titleDesc").html(exhibitionDesc);
+        $("#zhanhuiLogo").attr("src",upLoadShowUrl + data.data.logo);
+        $("#pdfUrl").val(upLoadShowUrl + data.data.pdfUrl);
+        var dataStr = JSON.parse(data.data.mapJson);
+        const windows:any = window;
+        windows?.init(dataStr);
+      } else {
+        message.info(data.message)
+      }
+    });
+  }
+
+  render() {
+      return <div className="home-page conten-p-r conten-p-l">
+        <div className="main">
+          <section id="map-section" className="inner over" style={{"paddingBottom": "0px"}}>
+            <div className="map-container">
+                <div id="mapplic"></div>
+            </div>
+          </section>
+        </div>
+      </div>;
+  }
+}
