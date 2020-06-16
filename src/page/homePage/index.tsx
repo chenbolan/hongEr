@@ -1,6 +1,6 @@
 import * as React from "react";
 import './homePage.scss'
-import {Post}  from '../../request';
+import {Post, requestUrl}  from '../../request';
 import { message } from 'antd';
 interface Props {}
 interface State {
@@ -20,24 +20,25 @@ export default class HomePage extends React.Component<Props, State> {
   }
 
   initMap = () => {
-    Post('/boothLayout/json', {
-        "id":15
-    },function(data: any){
-      if (data.code === 200) {
-        let layoutId, upLoadShowUrl;
-        layoutId=data.data.layoutId;
-        var exhibitionDesc = data.data.exhibitionDesc;
-        var sponsorUrl = data.data.sponsorUrl;
-        $("#wordpress").html('<strong>主办方链接</strong> ' + sponsorUrl);
-        $("#titleDesc").html(exhibitionDesc);
-        $("#zhanhuiLogo").attr("src",upLoadShowUrl + data.data.logo);
-        $("#pdfUrl").val(upLoadShowUrl + data.data.pdfUrl);
-        var dataStr = JSON.parse(data.data.mapJson);
-        const windows:any = window;
-        windows?.init(dataStr);
-      } else {
-        message.info(data.message)
-      }
+    Post(
+      requestUrl.boothLayoutUrl,
+      {id: 15},
+      function(data: any){
+        if (data.code === 200) {
+          let layoutId, upLoadShowUrl;
+          layoutId=data.data.layoutId;
+          var exhibitionDesc = data.data.exhibitionDesc;
+          var sponsorUrl = data.data.sponsorUrl;
+          $("#wordpress").html('<strong>主办方链接</strong> ' + sponsorUrl);
+          $("#titleDesc").html(exhibitionDesc);
+          $("#zhanhuiLogo").attr("src",upLoadShowUrl + data.data.logo);
+          $("#pdfUrl").val(upLoadShowUrl + data.data.pdfUrl);
+          var dataStr = JSON.parse(data.data.mapJson);
+          const windows:any = window;
+          windows?.init(dataStr);
+        } else {
+          message.info(data.message)
+        }
     });
   }
 

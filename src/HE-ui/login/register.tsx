@@ -1,5 +1,5 @@
 import * as React from "react";
-import {Post}  from '../../request';
+import {Post, requestUrl}  from '../../request';
 import { message, Modal, Form, Input, Button } from 'antd';
 import Cookies from 'js-cookie';
 interface Props {}
@@ -26,14 +26,18 @@ export default class Register extends React.Component<Props, State> {
 
   onFinish = (values: {[key: string]: any}) => {
     const _this = this;
-    const loginUrl = '/EmailRegister/';
     Post(
-      loginUrl,
+      requestUrl.registerUrl,
       values,
       function(data: any){
-        message.info('注册成功');
-        Cookies.set('userSession', data)
-        _this.toggleLoginPop(false)
+        if(data.code == 200){
+          message.success('注册以成功，请进入预留邮件激活账号');
+          Cookies.set('userName', values.username)
+          _this.toggleLoginPop(false);
+          window.headerRef.isLogin();
+        }else{
+          message.error(data.message)
+        }
       }
     )
   };
@@ -92,7 +96,7 @@ export default class Register extends React.Component<Props, State> {
 
             <Form.Item
               label="电话"
-              name="phone"
+              name="telePhone"
               rules={[{ required: true, message: 'Please input your phone!' }]}
             >
               <Input type="number" placeholder="请输入电话" />
@@ -108,15 +112,7 @@ export default class Register extends React.Component<Props, State> {
 
             <Form.Item
               label="确认密码"
-              name="confirmPassword"
-              rules={[{ required: true, message: 'Please confirm your password!' }]}
-            >
-              <Input  placeholder="请确认密码码" />
-            </Form.Item>
-
-            <Form.Item
-              label="密码"
-              name="password"
+              name="password2"
               rules={[{ required: true, message: 'Please input your password!' }]}
             >
               <Input.Password placeholder="请确认密码码" />

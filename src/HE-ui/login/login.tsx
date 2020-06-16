@@ -1,5 +1,5 @@
 import * as React from "react";
-import {Post}  from '../../request';
+import {Post, requestUrl}  from '../../request';
 import Cookies from 'js-cookie';
 import { message, Modal, Form, Input, Button, Checkbox } from 'antd';
 interface Props {}
@@ -28,15 +28,18 @@ export default class Login extends React.Component<Props, State> {
 
   onFinish = (values: {[key: string]: any}) => {
     const _this = this;
-    const loginUrl = '/EmailRegister/';
     Post(
-      loginUrl,
+      requestUrl.loginUrl,
       values,
       function(data: any){
-        message.info('登陆成功');
-        Cookies.set('userSession', data)
-        _this.toggleLoginPop(false);
-        window.headerRef.isLogin();
+        if(data.code === 200){
+          message.success('登陆成功');
+          Cookies.set('userName', data?.data?.username)
+          _this.toggleLoginPop(false);
+          window.headerRef.isLogin();
+        }else{
+          message.error(data.message);
+        }
       }
     )
   };

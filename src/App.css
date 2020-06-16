@@ -133,6 +133,10 @@ ul {
   height: 40px;
   box-sizing: border-box;
 }
+.exhibitionDesc_con {
+  max-height: 400px;
+  overflow: auto;
+}
 
 @media screen and (max-width: 980px){
   body,html, #root{
