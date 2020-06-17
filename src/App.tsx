@@ -8,7 +8,7 @@ import en from './translation/en';
 import cn from './translation/cn';
 import fr from './translation/fr';
 import it from './translation//it';
-
+import Cookies from 'js-cookie';
 import {HongErHeader} from './HE-ui';
 import { Layout } from 'antd';
 const { Header, Footer, Content } = Layout;
@@ -41,6 +41,7 @@ export default class App extends React.Component<{}, State>{
     this.setState({
       locale: locale
     });
+    Cookies.set("lang",locale);
   }
 
   render() {

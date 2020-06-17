@@ -8,9 +8,10 @@ export const requestUrl = {
   detail: '/boothLayout/detail',
   getCategoryByExhibitorId: '/front/getCategoryByExhibitorId',
   listByCatIdAndExhibitorId: '/front/listByCatIdAndExhibitorId',
+  linkCustomServiceUrl: '/front/addFirend',
 }
 
-const frontBaseUrl = 'https://fairsroom.com';
+export const frontBaseUrl = 'https://fairsroom.com';
 export function Post(url: string, data: {[key: string]: any}, successFn: any){
   $.ajax({
     cache : true,

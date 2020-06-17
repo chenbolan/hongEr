@@ -1,5 +1,5 @@
 export default {
-  menu1: '展会现场',
+  menu1: 'zhanhuixianchang',
   menu2: '展会简介',
   menu3: '电子会刊',
   chinese: '中文',

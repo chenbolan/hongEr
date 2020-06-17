@@ -2,8 +2,9 @@ import * as React from "react";
 import { LeftOutlined, RightOutlined,RedditOutlined } from '@ant-design/icons';
 import {Layout, Button, Carousel, message} from 'antd';
 import * as queryString from 'query-string';
-import {Post, requestUrl} from '../../request'
+import {Post, requestUrl, frontBaseUrl} from '../../request'
 import Cookies from 'js-cookie';
+
 require('./detail.scss');
 
 const { Content } = Layout;
@@ -198,6 +199,26 @@ export default class HomePage extends React.Component<Props, State> {
     });
   }
 
+  downloadPdfBtn = () => {
+    window.location.href  = frontBaseUrl + "/product/download?id=" + this.state.exhibitorId;
+  }
+
+  linkCustomService = () => {
+    const {exhibitorId, layoutId} = this.state;
+    const _this = this;
+    Post(
+      requestUrl.linkCustomServiceUrl,
+      {
+        userName:Cookies.get("userName"),
+        exhibitorId:exhibitorId,
+      },
+      function(data: any){
+        if (data != null) {
+          window.location.href  = frontBaseUrl + "/vm/pages/front/im/main.html?exhibitorId=" +  exhibitorId;
+        }
+      }
+    )
+  }
 
   render() {
       const logoUrl = localStorage.getItem('loginUrl') || '';
@@ -240,9 +261,9 @@ export default class HomePage extends React.Component<Props, State> {
                         <Button className="right-btn" icon={<RightOutlined />} onClick={()=>{this.toggleDetail(false)}}></Button>
                       </div>
                       <div className="j-link-con">
-                        <Button>3D展厅链接</Button>
-                        <Button>下载技术手册</Button>
-                        <Button type="primary" onClick={() => {}} icon={<RedditOutlined />}></Button>
+                        <Button >3D展厅链接</Button>
+                        <Button onClick={this.downloadPdfBtn}>下载技术手册</Button>
+                        <Button type="primary" onClick={this.linkCustomService} icon={<RedditOutlined />}></Button>
                       </div>
                     </div>
                   </div>

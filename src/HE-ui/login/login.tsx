@@ -36,7 +36,7 @@ export default class Login extends React.Component<Props, State> {
       function(data: any){
         if(data.code === 200){
           message.success(_this.props.messages.loginSuccess);
-          Cookies.set('userName', data?.data?.username)
+          Cookies.set('userName', data?.data?.username)        
           _this.toggleLoginPop(false);
           window.headerRef.isLogin();
         }else{
