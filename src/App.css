@@ -132,12 +132,16 @@ ul {
   padding-top: 10px;
   height: 40px;
   box-sizing: border-box;
+  margin: 0;
 }
+
 .exhibitionDesc_con {
   max-height: 400px;
   overflow: auto;
 }
-
+.ant-layout-content {
+  overflow: auto;
+}
 @media screen and (max-width: 980px){
   body,html, #root{
     height: auto;

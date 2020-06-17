@@ -68,9 +68,9 @@ export default class App extends React.Component<{}, State>{
           </Switch>
         </Content>
         <Footer>
-        <footer>
-          <p>{messages[locale].footer}</p>
-        </footer>
+          <footer>
+            <p>{messages[locale].footer}</p>
+          </footer>
         </Footer>
       </Layout>
     )
