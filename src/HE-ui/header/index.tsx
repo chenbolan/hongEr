@@ -52,10 +52,10 @@ class _Header extends React.Component<Props, State> {
     this.isLogin();
     this.getHeaderUrl();
     const { messages } = this.props;
-    const locale = Cookies.get('lang') || 'zh-CN';
+    const locale = Cookies.get('lang') || 'zh_CN';
     let lanuage = '';
     switch(locale){
-      case "zh-CN":
+      case "zh_CN":
         lanuage = messages.chinese
         break;
       case "en_US":
@@ -173,6 +173,7 @@ class _Header extends React.Component<Props, State> {
           localStorage.setItem('loginUrl', logoUrl);
           localStorage.setItem('exhibitionDesc', exhibitionDesc);
           _this.getSynopsis(layoutId);
+          document.title = exhibitionDesc;
         } else {
           message.error(data.message)
         }
