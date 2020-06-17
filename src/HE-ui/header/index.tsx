@@ -51,6 +51,26 @@ class _Header extends React.Component<Props, State> {
   componentDidMount(){
     this.isLogin();
     this.getHeaderUrl();
+    const { messages } = this.props;
+    const locale = Cookies.get('lang') || 'zh-CN';
+    let lanuage = '';
+    switch(locale){
+      case "zh-CN":
+        lanuage = messages.chinese
+        break;
+      case "en_US":
+        lanuage = messages.english
+        break;
+      case "fr":
+        lanuage = messages.french
+        break;
+      case "it":
+        lanuage = messages.italian
+        break;
+    }
+    this.setState({
+      lanuage: lanuage
+    });
   }
 
   handleClick = (e: any) => {
@@ -95,8 +115,8 @@ class _Header extends React.Component<Props, State> {
     const {messages} = this.props;
     return (
       <ul className="lanuage-list" style={{}}>
-        <li onClick={() => {this.changeLanusge('cn', messages.chinese)}}>{messages.chinese}</li>
-        <li onClick={() => {this.changeLanusge('en', messages.english)}}>{messages.english}</li>
+        <li onClick={() => {this.changeLanusge('zh_CN', messages.chinese)}}>{messages.chinese}</li>
+        <li onClick={() => {this.changeLanusge('en_US', messages.english)}}>{messages.english}</li>
         <li onClick={() => {this.changeLanusge('fr', messages.french)}}>{messages.french}</li>
         <li onClick={() => {this.changeLanusge('it', messages.italian)}}>{messages.italian}</li>
       </ul>
@@ -206,9 +226,9 @@ class _Header extends React.Component<Props, State> {
       <div className="d-flex">
         <div className="d-flex h-100 header-title-con">
           <div className="float-l d-flex">
-            <a className="icon-con flex-grow-1" href="javascript:;">
+            <div className="icon-con flex-grow-1" >
               <img src={loginUrl} alt=""/>
-            </a>
+            </div>
             <div>
               <h1>{exhibitionDesc}</h1>
               <h2>Global plastic exhibition sponsored by honger Exhibition</h2>

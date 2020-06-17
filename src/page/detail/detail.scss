@@ -93,7 +93,7 @@
       }
       img{
         max-height: 500px;
-       
+
       }
       video{
         max-height: 500px;
@@ -112,13 +112,26 @@
     margin-top: 10px;
   }
 
-  @media screen  and (max-width: 1200px){
+  @media screen  and (max-width: 1400px){
     .product-desc {
-      min-height: 300px;
+      min-height: 200px;
     }
     .detail-con .j-link-con {
       button{
         margin-left: 10px;
+      }
+    }
+    .carousel-items {
+      position: relative;
+      div {
+        width: 100%;
+      }
+      img{
+        height: 300px;
+
+      }
+      video{
+        height: 300px;
       }
     }
   }
@@ -148,6 +161,19 @@
     .detail-con .resource-con {
       margin: 0 auto;
       width: 100%;
+    }
+    .carousel-items {
+      position: relative;
+      div {
+        width: 100%;
+      }
+      img{
+        height: 150px;
+
+      }
+      video{
+        height: 150px;
+      }
     }
   }
 }

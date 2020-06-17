@@ -227,9 +227,9 @@ export default class HomePage extends React.Component<Props, State> {
       return <div className="detail-page conten-p-l conten-p-r">
         {!!Cookies.get('userName') && <Layout>
           <div className="detail-title">
-            <a href="javascript:;" className="icon-detail">
+            <div className="icon-detail">
               <img src={logoUrl} alt=""/>
-            </a>
+            </div>
             <span></span>
             <h1>{logexhibitionDescoUrl}</h1>
           </div>
@@ -250,7 +250,7 @@ export default class HomePage extends React.Component<Props, State> {
               </div>
               <Content>
                 <div className="d-flex product-introduce">
-                  <div className="product-int">
+                  <div className="product-int flex-grow-1">
                     <div className="product_name text-align-l">
                       {descriptionData?.[detailIndex]?.productName}
                     </div>

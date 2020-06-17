@@ -4,8 +4,8 @@ import './App.css';
 import './login-reg.scss';
 import HomePage from './page/homePage';
 import Detail from './page/detail';
-import en from './translation/en';
-import cn from './translation/cn';
+import en_US from './translation/en_US';
+import zh_CN from './translation/zh_CN';
 import fr from './translation/fr';
 import it from './translation//it';
 import Cookies from 'js-cookie';
@@ -20,8 +20,8 @@ declare global {
 }
 
 const messages: any = {
-  en: en,
-  cn: cn,
+  "en_US": en_US,
+  "zh_CN": zh_CN,
   fr: fr,
   it: it,
 }
@@ -32,12 +32,18 @@ export default class App extends React.Component<{}, State>{
   constructor(props: any){
     super(props);
     this.state = {
-      locale: 'cn'
+      locale: 'zh_CN'
     }
   }
 
+  componentDidMount(){
+    const locale = Cookies.get('lang') || 'zh_CN';
+    this.setState({
+      locale: locale
+    });
+  }
 
-  changeLanusge = (locale = 'cn'): void => {
+  changeLanusge = (locale = 'zh_CN'): void => {
     this.setState({
       locale: locale
     });
