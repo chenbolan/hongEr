@@ -2,7 +2,9 @@ import * as React from "react";
 import {Post, requestUrl}  from '../../request';
 import { message, Modal, Form, Input, Button } from 'antd';
 import Cookies from 'js-cookie';
-interface Props {}
+interface Props {
+  messages: any
+}
 interface State {
   openPop: boolean;
 }
@@ -26,15 +28,17 @@ export default class Register extends React.Component<Props, State> {
 
   onFinish = (values: {[key: string]: any}) => {
     const _this = this;
+    const {messages} = this.props;
     Post(
       requestUrl.registerUrl,
       values,
       function(data: any){
         if(data.code == 200){
-          message.success('注册以成功，请进入预留邮件激活账号');
-          Cookies.set('userName', values.username)
+          message.success(messages.registerSuccess);
+          // Cookies.set('userName', values.username);
           _this.toggleLoginPop(false);
           window.headerRef.isLogin();
+          window.headerRef.showLogin();
         }else{
           message.error(data.message)
         }
@@ -58,6 +62,7 @@ export default class Register extends React.Component<Props, State> {
   }
 
   render() {
+    const {messages} = this.props;
       return <div className="login-con">
         <Modal
           title=""
@@ -68,8 +73,8 @@ export default class Register extends React.Component<Props, State> {
           onCancel={() => {this.toggleLoginPop(false)}}
         >
           <div className="reg-title">
-            <span className="reg-text">注册</span>
-            <span>云展平台</span>
+            <span className="reg-text">{messages.register}</span>
+            <span>{messages.title}</span>
           </div>
           <Form
             {...layout}
@@ -79,53 +84,53 @@ export default class Register extends React.Component<Props, State> {
             onFinishFailed={this.onFinishFailed}
           >
             <Form.Item
-              label="用户名"
+              label={messages.name}
               name="username"
-              rules={[{ required: true, message: 'Please input your username!' }]}
+              rules={[{ required: true, message: messages.remind1 }]}
             >
-              <Input placeholder="请输入用户名"/>
+              <Input placeholder={messages.remind1}/>
             </Form.Item>
 
             <Form.Item
-              label="邮箱"
+              label={messages.email}
               name="email"
-              rules={[{ required: true, message: 'Please input your email!' }]}
+              rules={[{ required: true, message: messages.remind3 }]}
             >
-              <Input  placeholder="请输入邮箱"/>
+              <Input  placeholder={messages.remind3}/>
             </Form.Item>
 
             <Form.Item
-              label="电话"
+              label={messages.email}
               name="telePhone"
-              rules={[{ required: true, message: 'Please input your phone!' }]}
+              rules={[{ required: true, message: messages.remind4 }]}
             >
-              <Input type="number" placeholder="请输入电话" />
+              <Input type="number" placeholder={messages.remind4} />
             </Form.Item>
 
             <Form.Item
-              label="密码"
+              label={messages.passworld}
               name="password"
-              rules={[{ required: true, message: 'Please input your password!' }]}
+              rules={[{ required: true, message: messages.remind2 }]}
             >
-              <Input  placeholder="请输入密码" />
+              <Input  placeholder={messages.remind2} />
             </Form.Item>
 
             <Form.Item
-              label="确认密码"
+              label={messages.confirmPsw}
               name="password2"
-              rules={[{ required: true, message: 'Please input your password!' }]}
+              rules={[{ required: true, message: messages.remind5 }]}
             >
-              <Input.Password placeholder="请确认密码码" />
+              <Input.Password placeholder={messages.remind5} />
             </Form.Item>
 
             <Form.Item {...tailLayout}>
               <div className="d-flex to-reg-con">
                 <div className="flex-grow-1">
-                  已有账号？
-                  <span onClick={this.toLogin}>登录</span>
+                  {messages.hadAccount}
+                  <span onClick={this.toLogin}>{messages.login}</span>
                 </div>
                 <Button type="primary" htmlType="submit">
-                  注册
+                  {messages.register}
                 </Button>
               </div>
             </Form.Item>

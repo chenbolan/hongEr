@@ -12,7 +12,11 @@ enum MenuType {
   Menu2 = "MENU2",
   Menu3 = "MENU3",
 }
-interface Props {}
+interface Props {
+  // intl: IntlShape
+  messages: any;
+  changeLanusge: (locale: string) => void;
+}
 interface State {
   menuKey: MenuType;
   isLogin: boolean;
@@ -22,9 +26,10 @@ interface State {
   pdfUrl: string;
   exhibitionDesc: string;
   detail: {[key:string]: any};
+  lanuage: string
 }
 
-export default class Header extends React.Component<Props, State> {
+class _Header extends React.Component<Props, State> {
   regRef: any;
   logRef: any;
 
@@ -39,6 +44,7 @@ export default class Header extends React.Component<Props, State> {
       pdfUrl: '',
       exhibitionDesc: '',
       detail: {},
+      lanuage: this.props.messages.chinese
     }
   }
 
@@ -71,27 +77,37 @@ export default class Header extends React.Component<Props, State> {
   }
 
   renderMenu = () => {
+    const {messages} = this.props;
     return (<Menu mode="horizontal" onClick={this.handleClick} selectedKeys={[this.state.menuKey]}>
       <Menu.Item key={MenuType.Menu1} >
-        展会现场
+        {messages.menu1}
       </Menu.Item>
       <Menu.Item onClick={() => {this.togglePop(true)}}>
-        展会简介
+      {messages.menu2}
       </Menu.Item>
       <Menu.Item >
-        <a href={this.state.pdfUrl} target="_blank">电子会刊</a>
+        <a href={this.state.pdfUrl} target="_blank">{messages.menu3}</a>
       </Menu.Item>
     </Menu>)
   }
 
   getPopperContent = () => {
+    const {messages} = this.props;
     return (
       <ul className="lanuage-list" style={{}}>
-        <li>中文</li>
-        <li>英文</li>
-        <li>意大利文</li>
+        <li onClick={() => {this.changeLanusge('cn', messages.chinese)}}>{messages.chinese}</li>
+        <li onClick={() => {this.changeLanusge('en', messages.english)}}>{messages.english}</li>
+        <li onClick={() => {this.changeLanusge('fr', messages.french)}}>{messages.french}</li>
+        <li onClick={() => {this.changeLanusge('it', messages.italian)}}>{messages.italian}</li>
       </ul>
     )
+  }
+
+  changeLanusge = (locale: string, checked: string) => {
+    this.props.changeLanusge(locale);
+    this.setState({
+      lanuage: checked
+    });
   }
 
   getLoginContent = () => {
@@ -99,7 +115,7 @@ export default class Header extends React.Component<Props, State> {
       <div className="user-msg-con" style={{}}>
         <span>{this.state?.userName}</span>
         <div  onClick={this.logOut}>
-          退出登录
+          {this.props.messages.logOut}
           <LogoutOutlined />
         </div>
       </div>
@@ -184,7 +200,8 @@ export default class Header extends React.Component<Props, State> {
   }
 
   render() {
-    const { loginUrl, exhibitionDesc, pdfUrl } = this.state;
+    const { messages } = this.props;
+    const { loginUrl, exhibitionDesc, lanuage } = this.state;
     return <div className="he-header conten-p-l conten-p-r">
       <div className="d-flex">
         <div className="d-flex h-100 header-title-con">
@@ -208,7 +225,7 @@ export default class Header extends React.Component<Props, State> {
             <div className="language-con">
               <Popover content={this.getPopperContent()} title="" trigger="click">
                 <div>
-                  中文
+                  {lanuage}
                   <CaretDownOutlined/>
                 </div>
               </Popover>
@@ -227,9 +244,11 @@ export default class Header extends React.Component<Props, State> {
 
       </div>
 
-      <Login ref={(ref) => {this.logRef = ref}}/>
-      <Register ref={(ref) => {this.regRef = ref}}/>
+      <Login ref={(ref) => {this.logRef = ref}} messages={messages}/>
+      <Register ref={(ref) => {this.regRef = ref}}  messages={messages}/>
       {this.renderModal()}
     </div>;
   }
 }
+export default _Header;
+// export default injectIntl(_Header)
