@@ -25,5 +25,7 @@ export default {
   remind4: '请输入电话',
   remind5: '请确认密码',
   footer: '技术支持：北京汇展信息技术有限公司 ICP备：88888',
-  logOut: '退出登录'
+  logOut: '退出登录',
+  threeDLink: '3D展厅链接',
+  download: '下载技术手册',
 }

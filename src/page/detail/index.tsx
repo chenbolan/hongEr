@@ -4,6 +4,7 @@ import {Layout, Button, Carousel, message} from 'antd';
 import * as queryString from 'query-string';
 import {Post, requestUrl, frontBaseUrl} from '../../request'
 import Cookies from 'js-cookie';
+import { url } from "inspector";
 
 require('./detail.scss');
 
@@ -24,6 +25,7 @@ interface descriptionData {
   productName: string;
   productDesc: string;
   galleryLink: string;
+  threeDLink: string;
 }
 interface State {
   exhibitorId: string;
@@ -37,6 +39,7 @@ interface State {
   detailIndex: number;
   carouselData: Array<carouselData>;
   descriptionData: Array<descriptionData>;
+  threeDLink: string;
 
 }
 
@@ -56,6 +59,7 @@ export default class HomePage extends React.Component<Props, State> {
       descriptionData: [],
       currentIndex: 0,
       detailIndex: 0,
+      threeDLink: ''
     }
   }
 
@@ -139,6 +143,7 @@ export default class HomePage extends React.Component<Props, State> {
               productName: el?.productName,
               productDesc: el?.productDesc,
               galleryLink: el?.galleryLink,
+              threeDLink: el?.galleryLink
             }
           })
           _this.setState({
@@ -166,9 +171,11 @@ export default class HomePage extends React.Component<Props, State> {
 
   getCarouselItem = (el: any) => {
     if(el?.imgUrl){
-      return (<img alt={el?.productName} src={el?.imgUrl}/>)
+      // return (<img alt={el?.productName} src={el?.imgUrl}/>)
+      const url = el?.imgUrl || ''
+      return (<div className="c-img" style={{backgroundImage:`url(${url})`}}></div>)
     }else if(el?.videoUrl){
-      return (<video controls className="video-player" webkit-playsinline="" x-webkit-airplay="allow" preload="auto" src={el.videoUrl}/>)
+      return (<div className="c-img"><video controls className="video-player" webkit-playsinline="" x-webkit-airplay="allow" preload="auto" src={el.videoUrl}/></div>)
     }
   }
 
@@ -213,7 +220,8 @@ export default class HomePage extends React.Component<Props, State> {
   }
 
   downloadPdfBtn = () => {
-    window.location.href  = frontBaseUrl + "/product/download?id=" + this.state.exhibitorId;
+    const href  = frontBaseUrl + "/product/download?id=" + this.state.exhibitorId;
+    window.open(href)
   }
 
   goTo3D = () => {
@@ -231,16 +239,25 @@ export default class HomePage extends React.Component<Props, State> {
       },
       function(data: any){
         if (data != null) {
-          window.location.href  = frontBaseUrl + "/vm/pages/front/im/main.html?exhibitorId=" +  exhibitorId;
+          const href  = frontBaseUrl + "/vm/pages/front/im/main.html?exhibitorId=" +  exhibitorId;
+          window.open(href);
         }
       }
     )
+  }
+
+  toOpendThreeDLink = (link: string) => {
+    window.open(link)
   }
 
   render() {
       const logoUrl = localStorage.getItem('loginUrl') || '';
       const logexhibitionDescoUrl = localStorage.getItem('exhibitionDesc') || '';
       const {classifyData, currentIndex, carouselData, descriptionData, detailIndex} = this.state;
+      const threeDLink = descriptionData?.[detailIndex]?.threeDLink;
+      let messages: any = localStorage.getItem('messages') || '{}';
+      messages = JSON.parse(messages);
+
       return <div className="detail-page conten-p-l conten-p-r">
         {!!Cookies.get('userName') && <Layout>
           <div className="detail-title">
@@ -273,14 +290,14 @@ export default class HomePage extends React.Component<Props, State> {
                     </div>
                     <div className="text-align-l product-desc" dangerouslySetInnerHTML={{__html: descriptionData?.[detailIndex]?.productDesc}} ></div>
                     <div className="toggle-btn-con text-align-l d-flex">
-                      <div className="text-align-l d-inline-block flex-grow-1">
+                      <div className="text-align-l d-inline-block flex-grow-1 btn-con">
                         <Button icon={<LeftOutlined />} onClick={()=>{this.toggleDetail(true)}}></Button>
                         <Button className="right-btn" icon={<RightOutlined />} onClick={()=>{this.toggleDetail(false)}}></Button>
                       </div>
                       <div className="j-link-con">
-                        <Button onClick={this.goTo3D}>3D展厅链接</Button>
-                        <Button onClick={this.downloadPdfBtn}>下载技术手册</Button>
-                        <Button type="primary" onClick={this.linkCustomService} icon={<RedditOutlined />}></Button>
+                        { threeDLink && <Button onClick={() =>{this.toOpendThreeDLink(threeDLink)}}>{messages?.threeDLink}</Button>}
+                        <Button onClick={this.downloadPdfBtn}>{messages?.download}</Button>
+                        <div className="kefu" onClick={this.linkCustomService} ></div>
                       </div>
                     </div>
                   </div>
