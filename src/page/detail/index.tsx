@@ -169,7 +169,15 @@ export default class HomePage extends React.Component<Props, State> {
   }
 
   getQueryString(key: string): string {
-    const queryObject = queryString.parse(window.location.search);
+    const hash = window.location.hash;
+    const query: Array<string> = hash?.split('?')?.[1]?.split('&');
+    let queryObject: {[key: string]: any} = {};
+
+    query.forEach(el => {
+      const params = el.split('=');
+      const key = params[0];
+      queryObject[key] = params[1];
+    })
     const values = queryObject[key] || '';
     return values as string;
   }
