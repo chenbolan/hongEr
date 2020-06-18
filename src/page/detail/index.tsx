@@ -23,6 +23,7 @@ interface descriptionData {
   exhibitorName: string;
   productName: string;
   productDesc: string;
+  galleryLink: string;
 }
 interface State {
   exhibitorId: string;
@@ -30,6 +31,7 @@ interface State {
   name: string;
   logoUrl: string;
   exhibitorName: string;
+  galleryLink: string;
   classifyData: Array<classify>;
   currentIndex: number;
   detailIndex: number;
@@ -48,6 +50,7 @@ export default class HomePage extends React.Component<Props, State> {
       layoutId: '',
       logoUrl: '',
       exhibitorName: '',
+      galleryLink: '',
       classifyData: [],
       carouselData: [],
       descriptionData: [],
@@ -135,6 +138,7 @@ export default class HomePage extends React.Component<Props, State> {
               exhibitorName: el?.exhibitorName,
               productName: el?.productName,
               productDesc: el?.productDesc,
+              galleryLink: el?.galleryLink,
             }
           })
           _this.setState({
@@ -212,6 +216,10 @@ export default class HomePage extends React.Component<Props, State> {
     window.location.href  = frontBaseUrl + "/product/download?id=" + this.state.exhibitorId;
   }
 
+  goTo3D = () => {
+    window.location.href  = this.state.galleryLink;
+  }
+
   linkCustomService = () => {
     const {exhibitorId, layoutId} = this.state;
     const _this = this;
@@ -270,7 +278,7 @@ export default class HomePage extends React.Component<Props, State> {
                         <Button className="right-btn" icon={<RightOutlined />} onClick={()=>{this.toggleDetail(false)}}></Button>
                       </div>
                       <div className="j-link-con">
-                        <Button >3D展厅链接</Button>
+                        <Button onClick={this.goTo3D}>3D展厅链接</Button>
                         <Button onClick={this.downloadPdfBtn}>下载技术手册</Button>
                         <Button type="primary" onClick={this.linkCustomService} icon={<RedditOutlined />}></Button>
                       </div>

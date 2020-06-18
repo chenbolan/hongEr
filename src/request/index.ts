@@ -12,6 +12,7 @@ export const requestUrl = {
 }
 
 export const frontBaseUrl = 'https://fairsroom.com';
+//export const frontBaseUrl = 'http://localhost:8080';
 export function Post(url: string, data: {[key: string]: any}, successFn: any){
   $.ajax({
     cache : true,
