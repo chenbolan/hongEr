@@ -5,6 +5,7 @@ import { CaretDownOutlined, UserOutlined, LogoutOutlined, UsergroupAddOutlined} 
 import Login from '../login/login';
 import Register from '../login/register';
 import {Post, requestUrl}  from '../../request';
+import { createHashHistory } from 'history'
 
 require('./header.scss')
 enum MenuType {
@@ -85,6 +86,7 @@ class _Header extends React.Component<Props, State> {
 
   showLogin = () => {
     this.logRef.toggleLoginPop(true);
+    createHashHistory().push('/')
   }
 
   showRegister = () => {
