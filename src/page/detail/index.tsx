@@ -155,6 +155,7 @@ export default class HomePage extends React.Component<Props, State> {
       exhibitorId: exhibitorId,
       layoutId: layoutId
     },() => {
+      if(!exhibitorId || !layoutId) return false;
       this.getClaasify()
     });
   }
