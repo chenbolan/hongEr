@@ -51,8 +51,15 @@ class _Header extends React.Component<Props, State> {
   componentDidMount(){
     this.isLogin();
     this.getHeaderUrl();
-    const { messages } = this.props;
     const locale = Cookies.get('lang') || 'zh_CN';
+
+    this.setState({
+      lanuage: locale
+    });
+  }
+
+  getlanuage = (locale: string) => {
+    const { messages } = this.props;
     let lanuage = '';
     switch(locale){
       case "zh_CN":
@@ -68,11 +75,8 @@ class _Header extends React.Component<Props, State> {
         lanuage = messages.italian
         break;
     }
-    this.setState({
-      lanuage: lanuage
-    });
+    return lanuage;
   }
-
   handleClick = (e: any) => {
     // this.setState({
     //   menuKey: e.key,
@@ -115,19 +119,20 @@ class _Header extends React.Component<Props, State> {
     const {messages} = this.props;
     return (
       <ul className="lanuage-list" style={{}}>
-        <li onClick={() => {this.changeLanusge('zh_CN', messages.chinese)}}>{messages.chinese}</li>
-        <li onClick={() => {this.changeLanusge('en_US', messages.english)}}>{messages.english}</li>
-        <li onClick={() => {this.changeLanusge('fr', messages.french)}}>{messages.french}</li>
-        <li onClick={() => {this.changeLanusge('it', messages.italian)}}>{messages.italian}</li>
+        <li onClick={() => {this.changeLanusge('zh_CN')}}>{messages.chinese}</li>
+        <li onClick={() => {this.changeLanusge('en_US')}}>{messages.english}</li>
+        <li onClick={() => {this.changeLanusge('fr')}}>{messages.french}</li>
+        <li onClick={() => {this.changeLanusge('it')}}>{messages.italian}</li>
       </ul>
     )
   }
 
-  changeLanusge = (locale: string, checked: string) => {
-    this.props.changeLanusge(locale);
+  changeLanusge = (locale: string) => {
     this.setState({
-      lanuage: checked
+      lanuage: locale
     });
+    this.props.changeLanusge(locale);
+
   }
 
   getLoginContent = () => {
@@ -246,7 +251,7 @@ class _Header extends React.Component<Props, State> {
             <div className="language-con">
               <Popover content={this.getPopperContent()} title="" trigger="click">
                 <div>
-                  {lanuage}
+                  {this.getlanuage(lanuage)}
                   <CaretDownOutlined/>
                 </div>
               </Popover>

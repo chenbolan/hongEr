@@ -26,6 +26,7 @@ interface descriptionData {
   productDesc: string;
   galleryLink: string;
   threeDLink: string;
+  exhibitorLogo: string;
 }
 interface State {
   exhibitorId: string;
@@ -64,6 +65,12 @@ export default class HomePage extends React.Component<Props, State> {
   }
 
   componentDidMount(){
+    this.checkIsLogin().then(() => {
+      this.getExhibitorId();
+    })
+  }
+
+  componentDidUpdate(){
     this.checkIsLogin().then(() => {
       this.getExhibitorId();
     })
@@ -143,7 +150,8 @@ export default class HomePage extends React.Component<Props, State> {
               productName: el?.productName,
               productDesc: el?.productDesc,
               galleryLink: el?.galleryLink,
-              threeDLink: el?.galleryLink
+              threeDLink: el?.galleryLink,
+              exhibitorLogo: `${upLoadShowUrl}${el?.logo}`
             }
           })
           _this.setState({
@@ -183,7 +191,7 @@ export default class HomePage extends React.Component<Props, State> {
     const hash = window.location.hash;
     const query: Array<string> = hash?.split('?')?.[1]?.split('&');
     let queryObject: {[key: string]: any} = {};
-
+    if(!query) return '';
     query.forEach(el => {
       const params = el.split('=');
       const key = params[0];
@@ -262,10 +270,10 @@ export default class HomePage extends React.Component<Props, State> {
         {!!Cookies.get('userName') && <Layout>
           <div className="detail-title">
             <div className="icon-detail">
-              <img src={logoUrl} alt=""/>
+              <img src={descriptionData?.[detailIndex]?.exhibitorLogo} alt=""/>
             </div>
             <span></span>
-            <h1>{logexhibitionDescoUrl}</h1>
+            <h1>{descriptionData?.[detailIndex]?.exhibitorName}</h1>
           </div>
 
           <Content className="detail-con">
