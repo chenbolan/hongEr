@@ -70,12 +70,6 @@ export default class HomePage extends React.Component<Props, State> {
     })
   }
 
-  componentDidUpdate(){
-    this.checkIsLogin().then(() => {
-      this.getExhibitorId();
-    })
-  }
-
   checkIsLogin = ():Promise<boolean> => {
     if(!!Cookies.get('userName')){
       return Promise.resolve(true)
