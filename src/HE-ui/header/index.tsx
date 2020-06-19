@@ -5,7 +5,7 @@ import { CaretDownOutlined, UserOutlined, LogoutOutlined, UsergroupAddOutlined} 
 import Login from '../login/login';
 import Register from '../login/register';
 import {Post, requestUrl}  from '../../request';
-import { createHashHistory } from 'history'
+import { connect } from "react-redux";
 
 require('./header.scss')
 enum MenuType {
@@ -17,6 +17,11 @@ interface Props {
   // intl: IntlShape
   messages: any;
   changeLanusge: (locale: string) => void;
+  showLogin?: (isShow: boolean) => void;
+}
+
+interface ExtProps {
+
 }
 interface State {
   menuKey: MenuType;
@@ -27,10 +32,11 @@ interface State {
   pdfUrl: string;
   exhibitionDesc: string;
   detail: {[key:string]: any};
-  lanuage: string
+  lanuage: string;
+  isShowLogin: boolean;
 }
 
-class _Header extends React.Component<Props, State> {
+export class _Header extends React.Component<Props, State> {
   regRef: any;
   logRef: any;
 
@@ -45,7 +51,8 @@ class _Header extends React.Component<Props, State> {
       pdfUrl: '',
       exhibitionDesc: '',
       detail: {},
-      lanuage: this.props.messages.chinese
+      lanuage: this.props.messages.chinese,
+      isShowLogin: false
     }
   }
 
@@ -85,8 +92,7 @@ class _Header extends React.Component<Props, State> {
   };
 
   showLogin = () => {
-    this.logRef.toggleLoginPop(true);
-    createHashHistory().push('/')
+    this.toggleLoginPop(true);
   }
 
   showRegister = () => {
@@ -151,7 +157,7 @@ class _Header extends React.Component<Props, State> {
 
   logOut = () => {
     Cookies.set('userName', '');
-    this.logRef.toggleLoginPop(true);
+    this.toggleLoginPop(true)
     this.isLogin()
   }
 
@@ -227,6 +233,11 @@ class _Header extends React.Component<Props, State> {
     });
   }
 
+  toggleLoginPop = (isShow: boolean) => {
+    const showLogin = this?.props?.showLogin;
+    showLogin && showLogin(isShow)
+  }
+
   render() {
     const { messages } = this.props;
     const { loginUrl, exhibitionDesc, lanuage } = this.state;
@@ -265,18 +276,30 @@ class _Header extends React.Component<Props, State> {
                   <UserOutlined/>
                 </div>
               </Popover>}
-              {!this.state.isLogin && <UsergroupAddOutlined onClick={() => {this.logRef.toggleLoginPop(true)}}/>}
+              {!this.state.isLogin && <UsergroupAddOutlined onClick={() => {this.toggleLoginPop(true)}}/>}
             </div>
           </div>
         </div>
 
       </div>
 
-      <Login ref={(ref) => {this.logRef = ref}} messages={messages}/>
-      <Register ref={(ref) => {this.regRef = ref}}  messages={messages}/>
+      <Login messages={messages} showRegister={this.showRegister} checkIsLogin={this.isLogin}/>
+      <Register ref={(ref) => {this.regRef = ref}} showLogin={this.showLogin} messages={messages}/>
       {this.renderModal()}
     </div>;
   }
 }
-export default _Header;
-// export default injectIntl(_Header)
+
+const mapStateToProps = (state: ExtProps) => {
+  return {}
+}
+
+const mapDispatchToProps = (dispatch: any) => {
+  return {
+    showLogin: (isShow: boolean) => dispatch({
+      type: "ShowLogin",
+      isShow: isShow
+    })
+  }
+}
+export default connect(mapStateToProps, mapDispatchToProps)(_Header)

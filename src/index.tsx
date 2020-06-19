@@ -4,11 +4,18 @@ import './index.css';
 import App from './App';
 import * as serviceWorker from './serviceWorker';
 import { HashRouter } from 'react-router-dom';
+import { createStore } from "redux";
+import { Provider } from 'react-redux'
+import {reducer} from './redux/reducer';
+// 全局就管理一个store
+export const store = createStore(reducer as any);
 
 ReactDOM.render(
-  <HashRouter>
-    <App />
-  </HashRouter>,
+  <Provider store={store}>
+    <HashRouter>
+      <App />
+    </HashRouter>
+  </Provider>,
   document.getElementById('root')
 );
 

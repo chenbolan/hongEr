@@ -10,7 +10,7 @@ import fr from './translation/fr';
 import it from './translation//it';
 import Cookies from 'js-cookie';
 import {HongErHeader} from './HE-ui';
-import { Layout, message } from 'antd';
+import { Layout } from 'antd';
 const { Header, Footer, Content } = Layout;
 
 declare global {
@@ -60,7 +60,7 @@ export default class App extends React.Component<{}, State>{
           <HongErHeader
             messages={messages[locale]}
             changeLanusge={this.changeLanusge}
-            ref={(ref: any) => {window.headerRef = ref}}/>
+          />
         </Header>
         <Content>
           <Switch>

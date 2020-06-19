@@ -1,15 +1,17 @@
 import * as React from "react";
-import { LeftOutlined, RightOutlined,RedditOutlined } from '@ant-design/icons';
+import { LeftOutlined, RightOutlined } from '@ant-design/icons';
 import {Layout, Button, Carousel, message} from 'antd';
-import * as queryString from 'query-string';
 import {Post, requestUrl, frontBaseUrl} from '../../request'
 import Cookies from 'js-cookie';
-import { url } from "inspector";
+import { connect } from "react-redux";
 
 require('./detail.scss');
 
 const { Content } = Layout;
-interface Props {}
+interface Props {
+  isLogin?: boolean;
+  showLogin?: () => void;
+}
 
 interface classify {
   catId: string;
@@ -41,11 +43,12 @@ interface State {
   carouselData: Array<carouselData>;
   descriptionData: Array<descriptionData>;
   threeDLink: string;
-
+  carouselItemHeightf: number;
 }
 
-export default class HomePage extends React.Component<Props, State> {
-  carouselRef: any
+export class _HomePage extends React.Component<Props, State> {
+  carouselRef: any;
+  carouselItemRef: any;
   constructor(props: any){
     super(props);
     this.state={
@@ -60,21 +63,35 @@ export default class HomePage extends React.Component<Props, State> {
       descriptionData: [],
       currentIndex: 0,
       detailIndex: 0,
-      threeDLink: ''
+      threeDLink: '',
+      carouselItemHeightf: 0,
     }
+    this.carouselItemRef= React.createRef();
   }
 
   componentDidMount(){
     this.checkIsLogin().then(() => {
       this.getExhibitorId();
     })
+    const _this = this;
+    window.onresize = function(){
+      _this.getExhibitorId();
+    };
+  }
+
+  componentDidUpdate(preProps: Props, state: any){
+    // console.log(preProps, this.props)
+    if(!(preProps?.isLogin === this.props?.isLogin)){
+      this.getExhibitorId();
+    }
   }
 
   checkIsLogin = ():Promise<boolean> => {
     if(!!Cookies.get('userName')){
       return Promise.resolve(true)
     }else{
-      window.headerRef.showLogin();
+      const showLogin = this?.props?.showLogin;
+      showLogin && showLogin();
       return Promise.reject(false)
     }
   }
@@ -145,12 +162,14 @@ export default class HomePage extends React.Component<Props, State> {
               productDesc: el?.productDesc,
               galleryLink: el?.galleryLink,
               threeDLink: el?.galleryLink,
-              exhibitorLogo: `${upLoadShowUrl}${el?.logo}`
+              exhibitorLogo: `${upLoadShowUrl}${el?.logo}`,
             }
           })
           _this.setState({
             carouselData: carouselData,
             descriptionData: descriptionData
+          },() => {
+            _this.getCarouselItemHeightf()
           });
         }else{
           message.error(data.message);
@@ -201,8 +220,10 @@ export default class HomePage extends React.Component<Props, State> {
     let newIndex;
     if(isLeft){
       newIndex = detailIndex - 1;
+      this?.carouselRef?.slick?.slickPrev()
     }else{
       newIndex = detailIndex + 1;
+      this?.carouselRef?.slick?.slickNext()
     }
     newIndex = newIndex < 0 ? length : newIndex;
     newIndex = newIndex > length ? 0 : newIndex;
@@ -231,8 +252,9 @@ export default class HomePage extends React.Component<Props, State> {
   }
 
   linkCustomService = () => {
-    const {exhibitorId, layoutId} = this.state;
-    const _this = this;
+    const {exhibitorId} = this.state;
+    const userName = Cookies.get("userName");
+    if(!userName) return false;
     Post(
       requestUrl.linkCustomServiceUrl,
       {
@@ -252,10 +274,15 @@ export default class HomePage extends React.Component<Props, State> {
     window.open(link)
   }
 
+  getCarouselItemHeightf = () => {
+    const height = this.carouselItemRef?.current?.clientHeight || 0;
+    this.setState({
+      carouselItemHeightf: height
+    });
+  }
+
   render() {
-      const logoUrl = localStorage.getItem('loginUrl') || '';
-      const logexhibitionDescoUrl = localStorage.getItem('exhibitionDesc') || '';
-      const {classifyData, currentIndex, carouselData, descriptionData, detailIndex} = this.state;
+      const {classifyData, currentIndex, carouselData, descriptionData, detailIndex, carouselItemHeightf} = this.state;
       const threeDLink = descriptionData?.[detailIndex]?.threeDLink;
       let messages: any = localStorage.getItem('messages') || '{}';
       messages = JSON.parse(messages);
@@ -286,11 +313,11 @@ export default class HomePage extends React.Component<Props, State> {
               </div>
               <Content>
                 <div className="d-flex product-introduce">
-                  <div className="product-int flex-grow-1">
-                    <div className="product_name text-align-l">
+                  <div className="product-int flex-grow-1" style={{height: `${carouselItemHeightf}px`}}>
+                    <div className="product_name text-align-l" >
                       {descriptionData?.[detailIndex]?.productName}
                     </div>
-                    <div className="text-align-l product-desc" dangerouslySetInnerHTML={{__html: descriptionData?.[detailIndex]?.productDesc}} ></div>
+                    <div className="text-align-l product-desc" style={{height: `${carouselItemHeightf - 85}px`}} dangerouslySetInnerHTML={{__html: descriptionData?.[detailIndex]?.productDesc}} ></div>
                     <div className="toggle-btn-con text-align-l d-flex">
                       <div className="text-align-l d-inline-block flex-grow-1 btn-con">
                         <Button icon={<LeftOutlined />} onClick={()=>{this.toggleDetail(true)}}></Button>
@@ -304,12 +331,12 @@ export default class HomePage extends React.Component<Props, State> {
                     </div>
                   </div>
                   <div className="resource-con  d-flex">
-                    <Button onClick={() => {this?.carouselRef?.slick?.slickPrev()}} icon={<LeftOutlined />}></Button>
+                    <Button onClick={() => {this.toggleDetail(true)}} icon={<LeftOutlined />}></Button>
                     <div>
                       <Carousel className="flex-grow-1 carousel-con" ref={(ref) => {this.carouselRef = ref}}>
                         {carouselData?.map((el: any, index: number)=>{
                           return (
-                            <div key={index} className="carousel-items">
+                            <div key={index} className="carousel-items" ref={this.carouselItemRef}>
                               <div >
                                 <div>{this.getCarouselItem(el)}</div>
                                 <h3 className="resource-introduce">{el?.productName}</h3>
@@ -320,7 +347,7 @@ export default class HomePage extends React.Component<Props, State> {
                       </Carousel>
                       <div></div>
                     </div>
-                    <Button className="right-btn" onClick={() => {this?.carouselRef?.slick?.slickNext()}} icon={<RightOutlined />}></Button>
+                    <Button className="right-btn" onClick={() => {this.toggleDetail(false)}} icon={<RightOutlined />}></Button>
                   </div>
                 </div>
               </Content>
@@ -331,3 +358,20 @@ export default class HomePage extends React.Component<Props, State> {
       </div>;
   }
 }
+
+const mapDispatchToProps = (dispatch: any) => {
+  return {
+    showLogin: () => dispatch({
+      type: "ShowLogin",
+      isShow: true
+    })
+  }
+}
+
+const mapStateToProps = (state: Props) => {
+  return {
+    isLogin: state.isLogin
+  }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(_HomePage)

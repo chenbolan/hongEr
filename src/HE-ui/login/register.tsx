@@ -1,9 +1,9 @@
 import * as React from "react";
 import {Post, requestUrl}  from '../../request';
 import { message, Modal, Form, Input, Button } from 'antd';
-import Cookies from 'js-cookie';
 interface Props {
-  messages: any
+  messages: any;
+  showLogin: () => void;
 }
 interface State {
   openPop: boolean;
@@ -37,8 +37,7 @@ export default class Register extends React.Component<Props, State> {
           message.success(messages.registerSuccess);
           // Cookies.set('userName', values.username);
           _this.toggleLoginPop(false);
-          window.headerRef.isLogin();
-          window.headerRef.showLogin();
+          _this.props.showLogin();
         }else{
           message.error(data.message)
         }
@@ -58,7 +57,7 @@ export default class Register extends React.Component<Props, State> {
 
   toLogin = () => {
     this.toggleLoginPop(false);
-    window.headerRef.showLogin();
+    this.props.showLogin()
   }
 
   render() {
@@ -100,7 +99,7 @@ export default class Register extends React.Component<Props, State> {
             </Form.Item>
 
             <Form.Item
-              label={messages.email}
+              label={messages.tel}
               name="telePhone"
               rules={[{ required: true, message: messages.remind4 }]}
             >
@@ -112,7 +111,7 @@ export default class Register extends React.Component<Props, State> {
               name="password"
               rules={[{ required: true, message: messages.remind2 }]}
             >
-              <Input  placeholder={messages.remind2} />
+              <Input type="password" placeholder={messages.remind2} />
             </Form.Item>
 
             <Form.Item

@@ -9,7 +9,6 @@
     .icon-detail {
       width: 96px;
       height: 20px;
-      background: #aaa;
       display: inline-block;
       vertical-align: middle;
       img{
@@ -127,6 +126,9 @@
     font-weight: normal;
     margin-top: 10px;
   }
+  .toggle-btn-con {
+    margin-top: 10px;
+  }
   @media screen and (max-width: 2000px){
     .carousel-items {
       position: relative;
@@ -177,6 +179,9 @@
   @media screen  and (max-width: 750px){
     .product-introduce {
       display: block;
+    }
+    .product-int {
+      margin-bottom: 60px;
     }
     .product-desc {
       min-height: 100px;
