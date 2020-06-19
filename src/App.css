@@ -136,7 +136,7 @@ ul {
 }
 
 .exhibitionDesc_con {
-  max-height: 400px;
+  /* max-height: 400px; */
   overflow: auto;
 }
 .ant-layout-content {
