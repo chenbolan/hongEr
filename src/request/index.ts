@@ -1,5 +1,4 @@
 import $ from 'jquery';
-import { message } from 'antd';
 
 export const requestUrl = {
   loginUrl: '/EmailRegister/loginUser',
