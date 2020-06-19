@@ -1,4 +1,5 @@
 import * as React from "react";
+import Cookies from 'js-cookie';
 import './homePage.scss'
 import {Post, requestUrl}  from '../../request';
 import { message } from 'antd';
@@ -20,9 +21,10 @@ export default class HomePage extends React.Component<Props, State> {
   }
 
   initMap = () => {
+    const host = "https://" + window.location.host;
     Post(
-      requestUrl.boothLayoutUrl,
-      {id: 15},
+      requestUrl.boothLayoutUrl + "?lang=" + Cookies.get("lang"),
+      {domainUrl: host},
       function(data: any){
         if (data.code === 200) {
           let layoutId, upLoadShowUrl;

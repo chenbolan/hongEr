@@ -125,6 +125,24 @@ export class _HomePage extends React.Component<Props, State> {
     )
   }
 
+  saveCustomerLog = () => {
+    const {exhibitorId, layoutId} = this.state;
+    const _this = this;
+    Post(
+      requestUrl.saveCustomerLogUrl,
+      {
+        exhibitorId:exhibitorId,
+      },
+      function(data: any){
+        if(data.code === 200){
+          
+        }else{
+          message.error(data.message);
+        }
+      }
+    )
+  }
+
   getDetail = () => {
     const {exhibitorId, currentIndex, classifyData} = this.state;
     const catId = classifyData?.[currentIndex] || '';
@@ -187,6 +205,7 @@ export class _HomePage extends React.Component<Props, State> {
     },() => {
       if(!exhibitorId || !layoutId) return false;
       this.getClaasify()
+      this.saveCustomerLog();
     });
   }
 
@@ -243,7 +262,8 @@ export class _HomePage extends React.Component<Props, State> {
   }
 
   downloadPdfBtn = () => {
-    const href  = frontBaseUrl + "/product/download?id=" + this.state.exhibitorId;
+    var host = "https://" + window.location.host;
+    const href  = host + "/product/download?id=" + this.state.exhibitorId;
     window.open(href)
   }
 
@@ -254,6 +274,7 @@ export class _HomePage extends React.Component<Props, State> {
   linkCustomService = () => {
     const {exhibitorId} = this.state;
     const userName = Cookies.get("userName");
+    var host = "https://" + window.location.host;
     if(!userName) return false;
     Post(
       requestUrl.linkCustomServiceUrl,
@@ -263,7 +284,7 @@ export class _HomePage extends React.Component<Props, State> {
       },
       function(data: any){
         if (data != null) {
-          const href  = frontBaseUrl + "/vm/pages/front/im/main.html?exhibitorId=" +  exhibitorId;
+          const href  = host + "/vm/pages/front/im/main.html?exhibitorId=" +  exhibitorId;
           window.open(href);
         }
       }

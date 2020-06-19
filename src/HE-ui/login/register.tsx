@@ -29,6 +29,8 @@ export default class Register extends React.Component<Props, State> {
   onFinish = (values: {[key: string]: any}) => {
     const _this = this;
     const {messages} = this.props;
+    const host = "https://" + window.location.host;
+    values.domainUrl=host;
     Post(
       requestUrl.registerUrl,
       values,

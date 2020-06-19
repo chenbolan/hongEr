@@ -163,9 +163,11 @@ export class _Header extends React.Component<Props, State> {
 
   getHeaderUrl = () => {
     const _this = this;
+    const host = "https://" + window.location.host;
     Post(
-      requestUrl.boothLayoutUrl,
-      {id: 15},
+      requestUrl.boothLayoutUrl + "?lang=" + Cookies.get("lang"),
+      
+      {domainUrl: host},
       function(data: any){
         if (data.code === 200) {
 

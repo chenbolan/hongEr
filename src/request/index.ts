@@ -9,6 +9,7 @@ export const requestUrl = {
   getCategoryByExhibitorId: '/front/getCategoryByExhibitorId',
   listByCatIdAndExhibitorId: '/front/listByCatIdAndExhibitorId',
   linkCustomServiceUrl: '/front/addFirend',
+  saveCustomerLogUrl: '/pc/saveCustomerLog',
 }
 
 export const frontBaseUrl = 'https://fairsroom.com';

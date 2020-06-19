@@ -24,6 +24,6 @@ export default {
   remind3: '请输入邮箱',
   remind4: '请输入电话',
   remind5: '请确认密码',
-  footer: '技术支持：北京汇展信息技术有限公司 ICP备：88888',
+  footer: '技术支持：北京汇展信息技术有限公司 ICP备：京ICP备20021275号',
   logOut: '退出登录'
 }

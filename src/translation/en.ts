@@ -1,12 +1,12 @@
 export default {
-  menu1: '展会现场',
+  menu1: 'zhanhuixianchang',
   menu2: '展会简介',
   menu3: '电子会刊',
   chinese: '中文',
   english: '英语',
   french: '法语',
   italian: '意大利语',
-  title: 'Fairsroom',
+  title: '云展平台',
   name: '用户名',
   passworld: '密码',
   remember: '记住密码',
@@ -25,7 +25,5 @@ export default {
   remind4: '请输入电话',
   remind5: '请确认密码',
   footer: '技术支持：北京汇展信息技术有限公司 ICP备：京ICP备20021275号',
-  logOut: '退出登录',
-  threeDLink: '3D展厅链接',
-  download: '下载技术手册',
+  logOut: '退出登录'
 }
