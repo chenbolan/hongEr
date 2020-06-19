@@ -1,7 +1,7 @@
 import * as React from "react";
 import { LeftOutlined, RightOutlined } from '@ant-design/icons';
 import {Layout, Button, Carousel, message} from 'antd';
-import {Post, requestUrl, frontBaseUrl} from '../../request'
+import {requestUrl, request} from '../../request'
 import Cookies from 'js-cookie';
 import { connect } from "react-redux";
 
@@ -99,101 +99,88 @@ export class _HomePage extends React.Component<Props, State> {
   getClaasify = () => {
     const {exhibitorId, layoutId} = this.state;
     const _this = this;
-    Post(
-      requestUrl.getCategoryByExhibitorId,
-      {
-        layoutId:layoutId,
-        id:exhibitorId,
-      },
-      function(data: any){
-        if(data.code === 200){
-          const newData = data?.data?.map((el:any) => {
-            return {
-              catName: el?.category,
-              catId: el?.id,
-            }
-          })
-          _this.setState({
-            classifyData: newData
-          },() => {
-            _this.getDetail()
-          });
-        }else{
-          message.error(data.message);
-        }
+    const params = {
+      layoutId:layoutId,
+      id:exhibitorId,
+    }
+    request( requestUrl.getCategoryByExhibitorId, params).then((data) => {
+      if(data.code === 200){
+        const newData = data?.data?.map((el:any) => {
+          return {
+            catName: el?.category,
+            catId: el?.id,
+          }
+        })
+        _this.setState({
+          classifyData: newData
+        },() => {
+          _this.getDetail()
+        });
+      }else{
+        message.error(data.message);
       }
-    )
+    })
   }
 
   saveCustomerLog = () => {
-    const {exhibitorId, layoutId} = this.state;
-    const _this = this;
-    Post(
-      requestUrl.saveCustomerLogUrl,
-      {
-        exhibitorId:exhibitorId,
-      },
-      function(data: any){
-        if(data.code === 200){
-          
-        }else{
-          message.error(data.message);
-        }
+    const {exhibitorId} = this.state;
+    request(requestUrl.saveCustomerLogUrl, {exhibitorId:exhibitorId}).then(data => {
+      if(data.code === 200){
+      }else{
+        message.error(data.message);
       }
-    )
+    })
+
   }
 
   getDetail = () => {
     const {exhibitorId, currentIndex, classifyData} = this.state;
     const catId = classifyData?.[currentIndex] || '';
     const _this = this;
-    Post(
-      requestUrl.listByCatIdAndExhibitorId,
-      {
-        exhibitorId:exhibitorId,
-        catId:catId,
-      },
-      function(data: any){
-        if(data.code === 200){
-          var upLoadShowUrl= "https://exhibitionplatform.oss-cn-hongkong.aliyuncs.com/";
-          const carouselData: Array<carouselData> = [];
+    const params = {
+      exhibitorId:exhibitorId,
+      catId:catId,
+    }
+    request(requestUrl.listByCatIdAndExhibitorId, params).then(data => {
+      if(data.code === 200){
+        var upLoadShowUrl= "https://exhibitionplatform.oss-cn-hongkong.aliyuncs.com/";
+        const carouselData: Array<carouselData> = [];
 
-          data?.data?.forEach((el: any) => {
-            if(el?.imgUrl){
-              carouselData.push({
-                imgUrl: `${upLoadShowUrl}${el?.imgUrl}`,
-                productName: el?.productName
-              })
-            }
-            if(el?.videoUrl){
-              carouselData.push({
-                videoUrl: `${upLoadShowUrl}${el?.videoUrl}`,
-                // videoUrl: `http://pgc.qcdn.xiaodutv.com/1425596334_265493638_20200616081039.mp4?Cache-Control%3Dmax-age-8640000%26responseExpires%3DThu%2C_24_Sep_2020_08%3A11%3A10_GMT=&xcode=1d20d8470d650f5a4e469b84a48fec4ea1be0f25c587e7b7&time=1592414787&_=1592329910176`,
-                productName: el?.productName
-              })
-            }
-          });
-          const descriptionData = data?.data?.map((el:any) => {
-            return {
-              exhibitorName: el?.exhibitorName,
-              productName: el?.productName,
-              productDesc: el?.productDesc,
-              galleryLink: el?.galleryLink,
-              threeDLink: el?.galleryLink,
-              exhibitorLogo: `${upLoadShowUrl}${el?.logo}`,
-            }
-          })
-          _this.setState({
-            carouselData: carouselData,
-            descriptionData: descriptionData
-          },() => {
-            _this.getCarouselItemHeightf()
-          });
-        }else{
-          message.error(data.message);
-        }
+        data?.data?.forEach((el: any) => {
+          if(el?.imgUrl){
+            carouselData.push({
+              imgUrl: `${upLoadShowUrl}${el?.imgUrl}`,
+              productName: el?.productName
+            })
+          }
+          if(el?.videoUrl){
+            carouselData.push({
+              videoUrl: `${upLoadShowUrl}${el?.videoUrl}`,
+              // videoUrl: `http://pgc.qcdn.xiaodutv.com/1425596334_265493638_20200616081039.mp4?Cache-Control%3Dmax-age-8640000%26responseExpires%3DThu%2C_24_Sep_2020_08%3A11%3A10_GMT=&xcode=1d20d8470d650f5a4e469b84a48fec4ea1be0f25c587e7b7&time=1592414787&_=1592329910176`,
+              productName: el?.productName
+            })
+          }
+        });
+        const descriptionData = data?.data?.map((el:any) => {
+          return {
+            exhibitorName: el?.exhibitorName,
+            productName: el?.productName,
+            productDesc: el?.productDesc,
+            galleryLink: el?.galleryLink,
+            threeDLink: el?.galleryLink,
+            exhibitorLogo: `${upLoadShowUrl}${el?.logo}`,
+          }
+        })
+        _this.setState({
+          carouselData: carouselData,
+          descriptionData: descriptionData
+        },() => {
+          _this.getCarouselItemHeightf()
+        });
+      }else{
+        message.error(data.message);
       }
-    )
+    })
   }
 
   getExhibitorId = () => {
@@ -276,19 +263,17 @@ export class _HomePage extends React.Component<Props, State> {
     const userName = Cookies.get("userName");
     var host = "https://" + window.location.host;
     if(!userName) return false;
-    Post(
-      requestUrl.linkCustomServiceUrl,
-      {
-        userName:Cookies.get("userName"),
-        exhibitorId:exhibitorId,
-      },
-      function(data: any){
-        if (data != null) {
-          const href  = host + "/vm/pages/front/im/main.html?exhibitorId=" +  exhibitorId;
-          window.open(href);
-        }
+
+    const params = {
+      userName:Cookies.get("userName"),
+      exhibitorId:exhibitorId,
+    }
+    request(requestUrl.linkCustomServiceUrl, params).then(data => {
+      if (data != null) {
+        const href  = host + "/vm/pages/front/im/main.html?exhibitorId=" +  exhibitorId;
+        window.open(href);
       }
-    )
+    });
   }
 
   toOpendThreeDLink = (link: string) => {

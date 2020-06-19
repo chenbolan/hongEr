@@ -1,6 +1,7 @@
 import * as React from "react";
-import {Post, requestUrl}  from '../../request';
+import {requestUrl, request}  from '../../request';
 import { message, Modal, Form, Input, Button } from 'antd';
+
 interface Props {
   messages: any;
   showLogin: () => void;
@@ -31,20 +32,17 @@ export default class Register extends React.Component<Props, State> {
     const {messages} = this.props;
     const host = "https://" + window.location.host;
     values.domainUrl=host;
-    Post(
-      requestUrl.registerUrl,
-      values,
-      function(data: any){
-        if(data.code == 200){
-          message.success(messages.registerSuccess);
-          // Cookies.set('userName', values.username);
-          _this.toggleLoginPop(false);
-          _this.props.showLogin();
-        }else{
-          message.error(data.message)
-        }
+    request(requestUrl.registerUrl, values).then((data: any) => {
+      if(data.code == 200){
+        message.success(messages.registerSuccess);
+        // Cookies.set('userName', values.username);
+        _this.toggleLoginPop(false);
+        _this.props.showLogin();
+      }else{
+        message.error(data.message)
       }
-    )
+    })
+
   };
 
   onFinishFailed = (errorInfo : any) => {

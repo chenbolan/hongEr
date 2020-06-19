@@ -4,7 +4,7 @@ import { Menu, Popover, message, Modal} from 'antd';
 import { CaretDownOutlined, UserOutlined, LogoutOutlined, UsergroupAddOutlined} from '@ant-design/icons';
 import Login from '../login/login';
 import Register from '../login/register';
-import {Post, requestUrl}  from '../../request';
+import {requestUrl, request}  from '../../request';
 import { connect } from "react-redux";
 
 require('./header.scss')
@@ -164,51 +164,46 @@ export class _Header extends React.Component<Props, State> {
   getHeaderUrl = () => {
     const _this = this;
     const host = "https://" + window.location.host;
-    Post(
-      requestUrl.boothLayoutUrl + "?lang=" + Cookies.get("lang"),
-      
-      {domainUrl: host},
-      function(data: any){
-        if (data.code === 200) {
+    const url = requestUrl.boothLayoutUrl + "?lang=" + Cookies.get("lang")
+    request(url, {domainUrl: host}).then((data) => {
+      if (data.code === 200) {
 
-          const upLoadShowUrl= "https://exhibitionplatform.oss-cn-hongkong.aliyuncs.com/";
+        const upLoadShowUrl= "https://exhibitionplatform.oss-cn-hongkong.aliyuncs.com/";
 
-          const layoutId=data.data.layoutId;
-          var sponsorUrl = data.data.sponsorUrl;
-          // $("#wordpress").html('<strong>主办方链接</strong> ' + sponsorUrl);
+        const layoutId=data.data.layoutId;
+        // var sponsorUrl = data.data.sponsorUrl;
+        // $("#wordpress").html('<strong>主办方链接</strong> ' + sponsorUrl);
 
-          const logoUrl = `${upLoadShowUrl}${data.data.logo}` || '';
-          const exhibitionDesc = data.data.exhibitionDesc || '';
-          _this.setState({
-            loginUrl: logoUrl,
-            pdfUrl: `${upLoadShowUrl}${data.data.pdfUrl}` || '',
-            exhibitionDesc:  exhibitionDesc,
-          });
-          localStorage.setItem('layoutId', layoutId);
-          localStorage.setItem('loginUrl', logoUrl);
-          localStorage.setItem('exhibitionDesc', exhibitionDesc);
-          _this.getSynopsis(layoutId);
-          document.title = exhibitionDesc;
-        } else {
-          message.error(data.message)
-        }
-    });
+        const logoUrl = `${upLoadShowUrl}${data.data.logo}` || '';
+        const exhibitionDesc = data.data.exhibitionDesc || '';
+        _this.setState({
+          loginUrl: logoUrl,
+          pdfUrl: `${upLoadShowUrl}${data.data.pdfUrl}` || '',
+          exhibitionDesc:  exhibitionDesc,
+        });
+        localStorage.setItem('layoutId', layoutId);
+        localStorage.setItem('loginUrl', logoUrl);
+        localStorage.setItem('exhibitionDesc', exhibitionDesc);
+        _this.getSynopsis(layoutId);
+        document.title = exhibitionDesc;
+      } else {
+        message.error(data.message)
+      }
+    })
+
   }
 
   getSynopsis = (layoutId = '15') => {
     const _this = this;
-    Post(
-      requestUrl.detail,
-      {id: layoutId},
-      function(data: any){
-        if (data.code === 200) {
-          _this.setState({
-            detail: data.data
-          });
-        } else {
-          message.error(data.message)
-        }
-    });
+    request(requestUrl.detail, {id: layoutId}).then((data) => {
+      if (data.code === 200) {
+        _this.setState({
+          detail: data.data
+        });
+      } else {
+        message.error(data.message)
+      }
+    })
   }
 
   renderModal = () => {

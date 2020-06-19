@@ -1,4 +1,3 @@
-import $ from 'jquery';
 
 export const requestUrl = {
   loginUrl: '/EmailRegister/loginUser',
@@ -13,18 +12,22 @@ export const requestUrl = {
 
 export const frontBaseUrl = 'https://fairsroom.com';
 //export const frontBaseUrl = 'http://localhost:8080';
-export function Post(url: string, data: {[key: string]: any}, successFn: any){
-  $.ajax({
-    cache : true,
-    type : "POST",
-    url : `${frontBaseUrl}${url}`,
-    data : data,
-    async : false,
-    error : function(request) {
-      // message.info(request);
-    },
-    success : function(data) {
-      successFn(data)
-    }
- });
+
+export function request(url: string, data: {[key: string]: any}):Promise<any>{
+
+  const isDetail = url.indexOf('/boothLayout/detail') > -1 || url.indexOf('pc/saveCustomerLog') > -1
+  const keys     = Object.keys(data);
+  const formData: FormData = new FormData();
+  for (let i = 0; i < keys.length; i++) {
+    formData.append(keys[i], data[keys[i]]);
+  }
+
+  return fetch(`${frontBaseUrl}${url}`, {
+    method: 'POST',
+    body: isDetail ? formData : JSON.stringify(data),
+  }).then((response) => {
+    return response.json();
+  }).then(data => {
+    return Promise.resolve(data);
+  })
 }

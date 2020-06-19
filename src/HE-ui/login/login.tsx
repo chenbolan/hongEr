@@ -1,5 +1,5 @@
 import * as React from "react";
-import {Post, requestUrl}  from '../../request';
+import {requestUrl, request}  from '../../request';
 import Cookies from 'js-cookie';
 import { message, Modal, Form, Input, Button, Checkbox } from 'antd';
 import { connect } from "react-redux";
@@ -40,22 +40,18 @@ export class _Login extends React.Component<Props & ExtProps, State> {
   }
   onFinish = (values: {[key: string]: any}) => {
     const _this = this;
-    Post(
-      requestUrl.loginUrl,
-      values,
-      function(data: any){
-        if(data.code === 200){
-          message.success(_this.props.messages.loginSuccess);
-          Cookies.set('userName', data?.data?.username)
-          _this.toggleLoginPop(false);
-          _this.props.checkIsLogin();
-          const changeLoginStatus = _this?.props?.changeLoginStatus
-          changeLoginStatus && changeLoginStatus(true);
-        }else{
-          message.error(data.message);
-        }
+    request(requestUrl.loginUrl, values).then((data: any) => {
+      if(data.code === 200){
+        message.success(_this.props.messages.loginSuccess);
+        Cookies.set('userName', data?.data?.username)
+        _this.toggleLoginPop(false);
+        _this.props.checkIsLogin();
+        const changeLoginStatus = _this?.props?.changeLoginStatus
+        changeLoginStatus && changeLoginStatus(true);
+      }else{
+        message.error(data.message);
       }
-    )
+    });
   };
 
 

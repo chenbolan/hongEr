@@ -13,12 +13,6 @@ import {HongErHeader} from './HE-ui';
 import { Layout } from 'antd';
 const { Header, Footer, Content } = Layout;
 
-declare global {
-  interface Window {
-    headerRef: any;
-  }
-}
-
 const messages: any = {
   "en_US": en_US,
   "zh_CN": zh_CN,
