@@ -175,7 +175,7 @@ export class _Header extends React.Component<Props, State> {
 
           const layoutId=data.data.layoutId;
           var sponsorUrl = data.data.sponsorUrl;
-          $("#wordpress").html('<strong>主办方链接</strong> ' + sponsorUrl);
+          // $("#wordpress").html('<strong>主办方链接</strong> ' + sponsorUrl);
 
           const logoUrl = `${upLoadShowUrl}${data.data.logo}` || '';
           const exhibitionDesc = data.data.exhibitionDesc || '';
