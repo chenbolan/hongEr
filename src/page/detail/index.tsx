@@ -18,9 +18,8 @@ interface classify {
   catName: string;
 }
 interface carouselData {
-  imgUrl?: string;
+  imgUrl?: Array<string>;
   videoUrl?: string;
-  productName: string;
 }
 interface descriptionData {
   exhibitorName: string;
@@ -29,6 +28,7 @@ interface descriptionData {
   galleryLink: string;
   threeDLink: string;
   exhibitorLogo: string;
+  carouselData: carouselData;
 }
 interface State {
   exhibitorId: string;
@@ -75,7 +75,7 @@ export class _HomePage extends React.Component<Props, State> {
     })
     const _this = this;
     window.onresize = function(){
-      _this.getExhibitorId();
+      _this.getCarouselItemHeightf();
     };
   }
 
@@ -127,15 +127,23 @@ export class _HomePage extends React.Component<Props, State> {
     request(requestUrl.saveCustomerLogUrl, {exhibitorId:exhibitorId}).then(data => {
       if(data.code === 200){
       }else{
-        message.error(data.message);
+        // message.error(data.message);
       }
     })
 
   }
 
+  initImageUrl = (imgUrl: string) => {
+    var upLoadShowUrl= "https://exhibitionplatform.oss-cn-hongkong.aliyuncs.com/";
+    const imgData = imgUrl.split(';').map(el => {
+      return `${upLoadShowUrl}${el}`
+    });
+    return imgData
+  }
+
   getDetail = () => {
     const {exhibitorId, currentIndex, classifyData} = this.state;
-    const catId = classifyData?.[currentIndex] || '';
+    const catId = classifyData?.[currentIndex].catId || '';
     const _this = this;
     const params = {
       exhibitorId:exhibitorId,
@@ -144,22 +152,11 @@ export class _HomePage extends React.Component<Props, State> {
     request(requestUrl.listByCatIdAndExhibitorId, params).then(data => {
       if(data.code === 200){
         var upLoadShowUrl= "https://exhibitionplatform.oss-cn-hongkong.aliyuncs.com/";
-        const carouselData: Array<carouselData> = [];
+        const carouselData: carouselData = {};
 
         data?.data?.forEach((el: any) => {
-          if(el?.imgUrl){
-            carouselData.push({
-              imgUrl: `${upLoadShowUrl}${el?.imgUrl}`,
-              productName: el?.productName
-            })
-          }
-          if(el?.videoUrl){
-            carouselData.push({
-              videoUrl: `${upLoadShowUrl}${el?.videoUrl}`,
-              // videoUrl: `http://pgc.qcdn.xiaodutv.com/1425596334_265493638_20200616081039.mp4?Cache-Control%3Dmax-age-8640000%26responseExpires%3DThu%2C_24_Sep_2020_08%3A11%3A10_GMT=&xcode=1d20d8470d650f5a4e469b84a48fec4ea1be0f25c587e7b7&time=1592414787&_=1592329910176`,
-              productName: el?.productName
-            })
-          }
+          carouselData.imgUrl = this.initImageUrl(el?.imgUrl);
+          carouselData.videoUrl = el?.videoUrl ? `${upLoadShowUrl}${el?.videoUrl}` : '';
         });
         const descriptionData = data?.data?.map((el:any) => {
           return {
@@ -169,10 +166,10 @@ export class _HomePage extends React.Component<Props, State> {
             galleryLink: el?.galleryLink,
             threeDLink: el?.galleryLink,
             exhibitorLogo: `${upLoadShowUrl}${el?.logo}`,
+            carouselData: carouselData
           }
         })
         _this.setState({
-          carouselData: carouselData,
           descriptionData: descriptionData
         },() => {
           _this.getCarouselItemHeightf()
@@ -196,13 +193,13 @@ export class _HomePage extends React.Component<Props, State> {
     });
   }
 
-  getCarouselItem = (el: any) => {
-    if(el?.imgUrl){
+  getCarouselItem = (url: string, isVedio =false) => {
+    if(!isVedio){
       // return (<img alt={el?.productName} src={el?.imgUrl}/>)
-      const url = el?.imgUrl || ''
-      return (<div className="c-img" style={{backgroundImage:`url(${url})`}}></div>)
-    }else if(el?.videoUrl){
-      return (<div className="c-img"><video controls className="video-player" webkit-playsinline="" x-webkit-airplay="allow" preload="auto" src={el.videoUrl}/></div>)
+      const urls = url || ''
+      return (<div className="c-img" style={{backgroundImage:`url(${urls})`}}></div>)
+    }else{
+      return (<div className="c-img"><video controls className="video-player" webkit-playsinline="" x-webkit-airplay="allow" preload="auto" src={url}/></div>)
     }
   }
 
@@ -226,10 +223,8 @@ export class _HomePage extends React.Component<Props, State> {
     let newIndex;
     if(isLeft){
       newIndex = detailIndex - 1;
-      this?.carouselRef?.slick?.slickPrev()
     }else{
       newIndex = detailIndex + 1;
-      this?.carouselRef?.slick?.slickNext()
     }
     newIndex = newIndex < 0 ? length : newIndex;
     newIndex = newIndex > length ? 0 : newIndex;
@@ -241,9 +236,7 @@ export class _HomePage extends React.Component<Props, State> {
   onBtnCLick = (index: number) => {
     const {currentIndex} = this.state;
     if(currentIndex === index)return false;
-    this.setState(
-      {currentIndex: index
-    },()=>{
+    this.setState({currentIndex: index},()=>{
       this.getDetail()
     });
   }
@@ -287,20 +280,55 @@ export class _HomePage extends React.Component<Props, State> {
     });
   }
 
+  getCarouselItems = () => {
+    const {descriptionData, detailIndex} = this.state;
+    const item = [];
+    const detailData = descriptionData?.[detailIndex]?.carouselData
+    if(detailData?.imgUrl){
+      detailData.imgUrl.forEach((el, index) => {
+        const itemEmlement = (
+          <div key={index} className="carousel-items" ref={this.carouselItemRef}>
+            <div >
+              <div>{this.getCarouselItem(el, false)}</div>
+              <h3 className="resource-introduce">{descriptionData?.[detailIndex]?.productName}</h3>
+            </div>
+          </div>
+        );
+        item.push(itemEmlement)
+      })
+    }
+    const videoUrl = detailData?.videoUrl;
+    if(videoUrl){
+      const itemEmlement = (
+        <div key={videoUrl} className="carousel-items" ref={this.carouselItemRef}>
+          <div >
+            <div>{this.getCarouselItem(videoUrl, true)}</div>
+            <h3 className="resource-introduce">{descriptionData?.[detailIndex]?.productName}</h3>
+          </div>
+        </div>
+      );
+      item.push(itemEmlement)
+    }
+    return item;
+  }
+
   render() {
-      const {classifyData, currentIndex, carouselData, descriptionData, detailIndex, carouselItemHeightf} = this.state;
-      const threeDLink = descriptionData?.[detailIndex]?.threeDLink;
+      const {classifyData, currentIndex, descriptionData, detailIndex, carouselItemHeightf} = this.state;
       let messages: any = localStorage.getItem('messages') || '{}';
+
+      const detailData = descriptionData?.[detailIndex];
+      const threeDLink = detailData?.threeDLink;
+
       messages = JSON.parse(messages);
 
       return <div className="detail-page conten-p-l conten-p-r">
         {!!Cookies.get('userName') && <Layout>
           <div className="detail-title">
             <div className="icon-detail">
-              <img src={descriptionData?.[detailIndex]?.exhibitorLogo} alt=""/>
+              <img src={detailData?.exhibitorLogo} alt=""/>
             </div>
             <span></span>
-            <h1>{descriptionData?.[detailIndex]?.exhibitorName}</h1>
+            <h1>{detailData?.exhibitorName}</h1>
           </div>
 
           <Content className="detail-con">
@@ -321,9 +349,9 @@ export class _HomePage extends React.Component<Props, State> {
                 <div className="d-flex product-introduce">
                   <div className="product-int flex-grow-1" style={{height: `${carouselItemHeightf}px`}}>
                     <div className="product_name text-align-l" >
-                      {descriptionData?.[detailIndex]?.productName}
+                      {detailData?.productName}
                     </div>
-                    <div className="text-align-l product-desc" style={{height: `${carouselItemHeightf - 85}px`}} dangerouslySetInnerHTML={{__html: descriptionData?.[detailIndex]?.productDesc}} ></div>
+                    <div className="text-align-l product-desc" style={{height: `${carouselItemHeightf - 85}px`}} dangerouslySetInnerHTML={{__html: detailData?.productDesc}} ></div>
                     <div className="toggle-btn-con text-align-l d-flex">
                       <div className="text-align-l d-inline-block flex-grow-1 btn-con">
                         <Button icon={<LeftOutlined />} onClick={()=>{this.toggleDetail(true)}}></Button>
@@ -337,23 +365,14 @@ export class _HomePage extends React.Component<Props, State> {
                     </div>
                   </div>
                   <div className="resource-con  d-flex">
-                    <Button onClick={() => {this.toggleDetail(true)}} icon={<LeftOutlined />}></Button>
+                    <Button onClick={() => {this?.carouselRef?.slick?.slickPrev()}} icon={<LeftOutlined />}></Button>
                     <div>
                       <Carousel className="flex-grow-1 carousel-con" ref={(ref) => {this.carouselRef = ref}}>
-                        {carouselData?.map((el: any, index: number)=>{
-                          return (
-                            <div key={index} className="carousel-items" ref={this.carouselItemRef}>
-                              <div >
-                                <div>{this.getCarouselItem(el)}</div>
-                                <h3 className="resource-introduce">{el?.productName}</h3>
-                              </div>
-                            </div>
-                          )
-                        })}
+                        {this.getCarouselItems()}
                       </Carousel>
                       <div></div>
                     </div>
-                    <Button className="right-btn" onClick={() => {this.toggleDetail(false)}} icon={<RightOutlined />}></Button>
+                    <Button className="right-btn" onClick={() => {this?.carouselRef?.slick?.slickNext()}} icon={<RightOutlined />}></Button>
                   </div>
                 </div>
               </Content>

@@ -129,6 +129,9 @@
   .toggle-btn-con {
     margin-top: 10px;
   }
+  .slick-dots-bottom {
+    opacity: 0;
+  }
   @media screen and (max-width: 2000px){
     .carousel-items {
       position: relative;

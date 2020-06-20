@@ -15,7 +15,8 @@ export const frontBaseUrl = 'https://fairsroom.com';
 
 export function request(url: string, data: {[key: string]: any}):Promise<any>{
 
-  const isDetail = url.indexOf('/boothLayout/detail') > -1 || url.indexOf('pc/saveCustomerLog') > -1
+  // const isDetail = url.indexOf('/boothLayout/detail') > -1 || url.indexOf('pc/saveCustomerLog') > -1
+  const isDetail = true
   const keys     = Object.keys(data);
   const formData: FormData = new FormData();
   for (let i = 0; i < keys.length; i++) {

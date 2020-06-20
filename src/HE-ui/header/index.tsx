@@ -111,7 +111,7 @@ export class _Header extends React.Component<Props, State> {
   renderMenu = () => {
     const {messages} = this.props;
     return (<Menu mode="horizontal" onClick={this.handleClick} selectedKeys={[this.state.menuKey]}>
-      <Menu.Item key={MenuType.Menu1} >
+      <Menu.Item key={MenuType.Menu1} onClick={this.toIndex}>
         {messages.menu1}
       </Menu.Item>
       <Menu.Item onClick={() => {this.togglePop(true)}}>
@@ -235,6 +235,10 @@ export class _Header extends React.Component<Props, State> {
     showLogin && showLogin(isShow)
   }
 
+  toIndex = () => {
+    window.location.replace("#/")
+  }
+
   render() {
     const { messages } = this.props;
     const { loginUrl, exhibitionDesc, lanuage } = this.state;
@@ -242,7 +246,7 @@ export class _Header extends React.Component<Props, State> {
       <div className="d-flex">
         <div className="d-flex h-100 header-title-con">
           <div className="float-l d-flex">
-            <div className="icon-con flex-grow-1" >
+            <div className="icon-con flex-grow-1" onClick={this.toIndex}>
               <img src={loginUrl} alt=""/>
             </div>
             <div>
