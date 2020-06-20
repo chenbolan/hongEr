@@ -216,6 +216,8 @@ export class _Header extends React.Component<Props, State> {
           visible={this.state.openPop}
           mask={true}
           className="login_reg_m"
+          centered={true}
+          width={'80%'}
           onCancel={() => {this.togglePop(false)}}
         >
           <div className="exhibitionDesc_con" style={{height: `${window.screen.height*0.6}px`}} dangerouslySetInnerHTML={{__html: detail?.exhibitionProfile}}></div>
