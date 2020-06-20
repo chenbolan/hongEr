@@ -31,6 +31,7 @@ interface State {
   loginUrl: string;
   pdfUrl: string;
   exhibitionDesc: string;
+  exhibitionTitle: string;
   detail: {[key:string]: any};
   lanuage: string;
   isShowLogin: boolean;
@@ -50,6 +51,7 @@ export class _Header extends React.Component<Props, State> {
       loginUrl: '',
       pdfUrl: '',
       exhibitionDesc: '',
+      exhibitionTitle: '',
       detail: {},
       lanuage: this.props.messages.chinese,
       isShowLogin: false
@@ -176,14 +178,17 @@ export class _Header extends React.Component<Props, State> {
 
         const logoUrl = `${upLoadShowUrl}${data.data.logo}` || '';
         const exhibitionDesc = data.data.exhibitionDesc || '';
+        const exhibitionTitle = data.data.exhibitionTitle || '';
         _this.setState({
           loginUrl: logoUrl,
           pdfUrl: `${upLoadShowUrl}${data.data.pdfUrl}` || '',
           exhibitionDesc:  exhibitionDesc,
+          exhibitionTitle: exhibitionTitle,
         });
         localStorage.setItem('layoutId', layoutId);
         localStorage.setItem('loginUrl', logoUrl);
         localStorage.setItem('exhibitionDesc', exhibitionDesc);
+        localStorage.setItem('exhibitionTitle', exhibitionTitle);
         _this.getSynopsis(layoutId);
         document.title = exhibitionDesc;
       } else {
@@ -243,7 +248,7 @@ export class _Header extends React.Component<Props, State> {
 
   render() {
     const { messages } = this.props;
-    const { loginUrl, exhibitionDesc, lanuage } = this.state;
+    const { loginUrl, exhibitionDesc, lanuage, exhibitionTitle } = this.state;
     return <div className="he-header conten-p-l conten-p-r">
       <div className="d-flex">
         <div className="d-flex h-100 header-title-con">
@@ -253,7 +258,7 @@ export class _Header extends React.Component<Props, State> {
             </div>
             <div>
               <h1>{exhibitionDesc}</h1>
-              <h2>Global plastic exhibition sponsored by honger Exhibition</h2>
+              <h2>{exhibitionTitle}</h2>
             </div>
           </div>
         </div>
