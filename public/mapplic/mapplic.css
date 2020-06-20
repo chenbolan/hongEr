@@ -896,7 +896,7 @@ button.mapplic-zoomout-button {
 	height: 0;
 	position: absolute;
 	top: 0;
-	margin-left: -7px;
+	margin-left: -50%;
 	margin-top: -33px; /* SHIFT */
 }
 
