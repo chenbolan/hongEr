@@ -44,6 +44,8 @@ export default class App extends React.Component<{}, State>{
     });
     Cookies.set("lang",locale);
     localStorage.setItem('messages', JSON.stringify(messages[locale]))
+    //刷新页面
+    window.location.reload();
   }
 
   render() {
