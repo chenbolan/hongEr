@@ -158,13 +158,16 @@ export class _HomePage extends React.Component<Props, State> {
     request(requestUrl.listByCatIdAndExhibitorId, params).then(data => {
       if(data.code === 200){
         var upLoadShowUrl= "https://exhibitionplatform.oss-cn-hongkong.aliyuncs.com/";
-        const carouselData: carouselData = {};
+        
 
-        data?.data?.forEach((el: any) => {
+        // data?.data?.forEach((el: any) => {
+        //   carouselData.imgUrl = this.initImageUrl(el?.imgUrl);
+        //   carouselData.videoUrl = el?.videoUrl ? `${upLoadShowUrl}${el?.videoUrl}` : '';
+        // });
+        const descriptionData = data?.data?.map((el:any) => {
+          const carouselData: carouselData = {};
           carouselData.imgUrl = this.initImageUrl(el?.imgUrl);
           carouselData.videoUrl = el?.videoUrl ? `${upLoadShowUrl}${el?.videoUrl}` : '';
-        });
-        const descriptionData = data?.data?.map((el:any) => {
           return {
             exhibitorName: el?.exhibitorName,
             productName: el?.productName,
