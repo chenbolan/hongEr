@@ -88,20 +88,21 @@ export class _HomePage extends React.Component<Props, State> {
 
   checkIsLogin = ():Promise<boolean> => {
     const params = {
-     
+
     }
-    return request( requestUrl.isLoginUrl, params).then((data) => {
+    return request(requestUrl.isLoginUrl, params).then((data) => {
       if(data.code === 200){
         return Promise.resolve(true)
       }else{
         const showLogin = this?.props?.showLogin;
         showLogin && showLogin();
+        Cookies.set('userName', '');
         return Promise.reject(false)
       }
     })
   }
-  
-  
+
+
   getClaasify = () => {
     const {exhibitorId, layoutId} = this.state;
     const _this = this;
@@ -158,7 +159,7 @@ export class _HomePage extends React.Component<Props, State> {
     request(requestUrl.listByCatIdAndExhibitorId, params).then(data => {
       if(data.code === 200){
         var upLoadShowUrl= "https://exhibitionplatform.oss-cn-hongkong.aliyuncs.com/";
-        
+
 
         // data?.data?.forEach((el: any) => {
         //   carouselData.imgUrl = this.initImageUrl(el?.imgUrl);

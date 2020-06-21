@@ -5,6 +5,8 @@ body,html, #root{
   min-width: 250px;
 }
 
+html, body {height:100%;overflow:auto;margin: 0;}
+html{overflow-y:scroll;}
 .App {
   text-align: center;
   flex-direction: column;
