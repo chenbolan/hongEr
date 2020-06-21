@@ -67,7 +67,10 @@ export default class App extends React.Component<{}, State>{
         </Content>
         <Footer>
           <footer>
-            <p>{messages[locale].footer}</p>
+            <p>{messages[locale].footer}
+        
+            </p>
+
           </footer>
         </Footer>
       </Layout>
