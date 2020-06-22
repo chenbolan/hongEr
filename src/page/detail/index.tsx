@@ -377,7 +377,7 @@ export class _HomePage extends React.Component<Props, State> {
                       <div className="j-link-con">
                         { threeDLink && <Button onClick={() =>{this.toOpendThreeDLink(threeDLink)}}>{messages?.threeDLink}</Button>}
                         <Button onClick={this.downloadPdfBtn}>{messages?.download}</Button>
-                        <div className="kefu" onClick={this.linkCustomService} ></div>
+                        <div className="kefu" onClick={this.linkCustomService} title={messages.service}></div>
                       </div>
                     </div>
                   </div>

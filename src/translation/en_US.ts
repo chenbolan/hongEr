@@ -28,4 +28,5 @@ export default {
   logOut: '退出登录',
   threeDLink: '3D展厅链接',
   download: '下载技术手册',
+  service: '联系客服'
 }
