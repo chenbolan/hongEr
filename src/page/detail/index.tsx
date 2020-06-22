@@ -87,19 +87,26 @@ export class _HomePage extends React.Component<Props, State> {
   }
 
   checkIsLogin = ():Promise<boolean> => {
-    const params = {
-
+    if(!!Cookies.get('userName')){
+      return Promise.resolve(true)
+    }else{
+      const showLogin = this?.props?.showLogin;
+      showLogin && showLogin();
+      return Promise.reject(false)
     }
-    return request(requestUrl.isLoginUrl, params).then((data) => {
-      if(data.code === 200){
-        return Promise.resolve(true)
-      }else{
-        const showLogin = this?.props?.showLogin;
-        showLogin && showLogin();
-        Cookies.set('userName', '');
-        return Promise.reject(false)
-      }
-    })
+    // const params = {
+
+    // }
+    // return request(requestUrl.isLoginUrl, params).then((data) => {
+    //   if(data.code === 200){
+    //     return Promise.resolve(true)
+    //   }else{
+    //     const showLogin = this?.props?.showLogin;
+    //     showLogin && showLogin();
+    //     Cookies.set('userName', '');
+    //     return Promise.reject(false)
+    //   }
+    // })
   }
 
 

@@ -85,9 +85,9 @@ export default class Register extends React.Component<Props, State> {
             <Form.Item
               label={messages.name}
               name="username"
-              rules={[{ required: true, message: messages.remind1 }]}
+              rules={[{ required: true, message: messages.remind1 },{ pattern:/^[a-zA-Z0-9_]+$/,message:'用户名必须是英文，数字或下划线组成!'}]}
             >
-              <Input placeholder={messages.remind1}/>
+              <Input  placeholder={messages.remind1}/>
             </Form.Item>
 
             <Form.Item
