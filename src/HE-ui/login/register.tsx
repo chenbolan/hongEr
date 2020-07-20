@@ -1,7 +1,7 @@
 import * as React from "react";
 import {requestUrl, request}  from '../../request';
 import { message, Modal, Form, Input, Button } from 'antd';
-
+import Cookies from 'js-cookie';
 interface Props {
   messages: any;
   showLogin: () => void;
@@ -32,7 +32,8 @@ export default class Register extends React.Component<Props, State> {
     const {messages} = this.props;
     const host = "https://" + window.location.host;
     values.domainUrl=host;
-    request(requestUrl.registerUrl, values).then((data: any) => {
+    const url = requestUrl.registerUrl + "?lang=" + Cookies.get("lang")
+    request(url, values).then((data: any) => {
       if(data.code == 200){
         message.success(messages.registerSuccess);
         // Cookies.set('userName', values.username);
@@ -85,7 +86,7 @@ export default class Register extends React.Component<Props, State> {
             <Form.Item
               label={messages.name}
               name="username"
-              rules={[{ required: true, message: messages.remind1 },{ pattern:/^[a-zA-Z0-9_]+$/,message:'用户名必须是英文，数字或下划线组成!'}]}
+              rules={[{ required: true, message: messages.remind1 },{ pattern:/^[a-zA-Z0-9_]+$/,message:messages.remind6}]}
             >
               <Input  placeholder={messages.remind1}/>
             </Form.Item>

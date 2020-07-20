@@ -117,7 +117,8 @@ export class _HomePage extends React.Component<Props, State> {
       layoutId:layoutId,
       id:exhibitorId,
     }
-    request( requestUrl.getCategoryByExhibitorId, params).then((data) => {
+    const url = requestUrl.getCategoryByExhibitorId + "?lang=" + Cookies.get("lang")
+    request( url, params).then((data) => {
       if(data.code === 200){
         const newData = data?.data?.map((el:any) => {
           return {
@@ -138,7 +139,8 @@ export class _HomePage extends React.Component<Props, State> {
 
   saveCustomerLog = () => {
     const {exhibitorId} = this.state;
-    request(requestUrl.saveCustomerLogUrl, {exhibitorId:exhibitorId}).then(data => {
+    const userName = Cookies.get("userName");
+    request(requestUrl.saveCustomerLogUrl, {exhibitorId:exhibitorId,userName:userName}).then(data => {
       if(data.code === 200){
       }else{
         // message.error(data.message);
@@ -280,6 +282,7 @@ export class _HomePage extends React.Component<Props, State> {
     }
     request(requestUrl.linkCustomServiceUrl, params).then(data => {
       if (data != null) {
+        Cookies.set("kefuUid",data.data);
         const href  = host + "/vm/pages/front/im/main.html?exhibitorId=" +  exhibitorId;
         window.open(href);
       }

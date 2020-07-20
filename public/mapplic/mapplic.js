@@ -6,7 +6,13 @@
 
 ;(function($) {
 	"use strict";
-
+	 var messages = localStorage.getItem('messages')
+	 var productDetail = "Product Details"
+	 if(messages != null && messages != undefined){
+		var messagesJsonObj = eval('(' + messages + ')');
+		productDetail = messagesJsonObj["productDetail"]
+	 }
+	 
 	var Mapplic = function(element) {
 
 		var self = this;
@@ -67,7 +73,7 @@
 		};
 
 		self.loc = {
-			more: '产品详情',
+			more: productDetail,
 			search: 'Search',
 			iconfile: 'mapplic/images/icons.svg'
 		}

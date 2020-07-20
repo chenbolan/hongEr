@@ -3,6 +3,7 @@ export const requestUrl = {
   loginUrl: '/EmailRegister/loginUser',
   registerUrl: '/EmailRegister/register',
   boothLayoutUrl: '/boothLayout/json',
+  boothLayoutUrlHeader: '/boothLayout/headerjson',
   detail: '/boothLayout/detail',
   getCategoryByExhibitorId: '/front/getCategoryByExhibitorId',
   listByCatIdAndExhibitorId: '/front/listByCatIdAndExhibitorId',

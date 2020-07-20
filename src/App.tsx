@@ -6,8 +6,8 @@ import HomePage from './page/homePage';
 import Detail from './page/detail';
 import en_US from './translation/en_US';
 import zh_CN from './translation/zh_CN';
-import fr from './translation/fr';
-import it from './translation//it';
+import ja_JP from './translation/ja_JP';
+import ru_RU from './translation/ru_RU';
 import Cookies from 'js-cookie';
 import {HongErHeader} from './HE-ui';
 import { Layout } from 'antd';
@@ -16,8 +16,8 @@ const { Header, Footer, Content } = Layout;
 const messages: any = {
   "en_US": en_US,
   "zh_CN": zh_CN,
-  fr: fr,
-  it: it,
+  ja_JP: ja_JP,
+  ru_RU: ru_RU,
 }
 interface State {
   locale: string
@@ -26,19 +26,19 @@ export default class App extends React.Component<{}, State>{
   constructor(props: any){
     super(props);
     this.state = {
-      locale: 'zh_CN'
+      locale: 'en_US'
     }
   }
 
   componentDidMount(){
-    const locale = Cookies.get('lang') || 'zh_CN';
+    const locale = Cookies.get('lang') || 'en_US';
     this.setState({
       locale: locale
     });
     localStorage.setItem('messages', JSON.stringify(messages[locale]))
   }
 
-  changeLanusge = (locale = 'zh_CN'): void => {
+  changeLanusge = (locale = 'en_US'): void => {
     this.setState({
       locale: locale
     });

@@ -3,8 +3,10 @@ export default {
   menu2: '展会简介',
   menu3: '电子会刊',
   chinese: '中文',
-  english: '英语',
+  english: 'English',
   french: '法语',
+  japan: '日本語',
+  russion: 'русский',
   italian: '意大利语',
   title: 'Fairsroom',
   name: '用户名',
@@ -24,9 +26,11 @@ export default {
   remind3: '请输入邮箱',
   remind4: '请输入电话',
   remind5: '请确认密码',
+  remind6: '用户名必须是英文，数字或下划线组成!',
   footer: '技术支持：北京汇展信息技术有限公司 ICP备：京ICP备20021275号',
   logOut: '退出登录',
   threeDLink: '3D展厅链接',
   download: '下载技术手册',
-  service: '联系客服'
+  service: '联系客服',
+  productDetail: '产品详情'
 }

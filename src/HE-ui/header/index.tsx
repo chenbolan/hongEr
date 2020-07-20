@@ -61,7 +61,10 @@ export class _Header extends React.Component<Props, State> {
   componentDidMount(){
     this.isLogin();
     this.getHeaderUrl();
-    const locale = Cookies.get('lang') || 'zh_CN';
+    const locale = Cookies.get('lang') || 'en_US';
+    if(Cookies.get('lang')==undefined){
+      Cookies.set("lang","en_US");
+    }
 
     this.setState({
       lanuage: locale
@@ -78,11 +81,11 @@ export class _Header extends React.Component<Props, State> {
       case "en_US":
         lanuage = messages.english
         break;
-      case "fr":
-        lanuage = messages.french
+      case "ja_JP":
+        lanuage = messages.japan
         break;
-      case "it":
-        lanuage = messages.italian
+      case "ru_RU":
+        lanuage = messages.russion
         break;
     }
     return lanuage;
@@ -131,8 +134,8 @@ export class _Header extends React.Component<Props, State> {
       <ul className="lanuage-list" style={{}}>
         <li onClick={() => {this.changeLanusge('zh_CN')}}>{messages.chinese}</li>
         <li onClick={() => {this.changeLanusge('en_US')}}>{messages.english}</li>
-        <li onClick={() => {this.changeLanusge('fr')}}>{messages.french}</li>
-        <li onClick={() => {this.changeLanusge('it')}}>{messages.italian}</li>
+        <li onClick={() => {this.changeLanusge('ja_JP')}}>{messages.japan}</li>
+        <li onClick={() => {this.changeLanusge('ru_RU')}}>{messages.russion}</li>
       </ul>
     )
   }
@@ -166,7 +169,10 @@ export class _Header extends React.Component<Props, State> {
   getHeaderUrl = () => {
     const _this = this;
     const host = "https://" + window.location.host;
-    const url = requestUrl.boothLayoutUrl + "?lang=" + Cookies.get("lang")
+    if(Cookies.get('lang')==undefined){
+      Cookies.set("lang","en_US");
+    }
+    const url = requestUrl.boothLayoutUrlHeader + "?lang=" + Cookies.get("lang")
     request(url, {domainUrl: host}).then((data) => {
       if (data.code === 200) {
 

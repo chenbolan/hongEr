@@ -40,7 +40,9 @@ export class _Login extends React.Component<Props & ExtProps, State> {
   }
   onFinish = (values: {[key: string]: any}) => {
     const _this = this;
-    request(requestUrl.loginUrl, values).then((data: any) => {
+    const host = "https://" + window.location.host;
+    const tmploginUrl = requestUrl.loginUrl + "?lang=" + Cookies.get("lang")
+    request(tmploginUrl, values).then((data: any) => {
       if(data.code === 200){
         message.success(_this.props.messages.loginSuccess);
         Cookies.set('userName', data?.data?.username)
