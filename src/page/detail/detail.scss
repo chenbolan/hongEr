@@ -1,4 +1,49 @@
 .detail-page {
+  .closeChat {
+    color:black;
+    position: fixed;
+    z-index:999;
+    right:40px; bottom:423px;
+    cursor: pointer;
+  }
+
+  .chatContentDiv {
+    width: 600px;
+    height: 410px;
+    background-color: #cccccc;
+    position: fixed;
+    z-index:99;
+    right:20px; bottom:46px;
+  }
+  .kefuchatDiv {
+    position: fixed;
+    z-index:99;
+    right:20px; bottom:10px;
+    width: 250px;
+    border-radius: 5px;
+    height: 36px;
+    background-color: #4c85ed;
+    line-height: 36px;
+    .kefuchat {
+       width: 250px;
+       text-align: center;
+       display:block;
+       float: left;
+       cursor: pointer;
+    }
+    .chatMore {
+      width: 70px;
+      text-align: center;
+      display:block;
+      float: right;
+      background-color: #386ed3;
+      border-bottom-right-radius: 5px;
+      border-top-right-radius: 5px;
+      cursor: pointer;
+    }
+  }
+
+
   .detail-title {
     & {
       text-align: left;
@@ -68,6 +113,7 @@
       text-align: left;
       width: 50%;
       margin-left: 6%;
+      z-index: 1
     }
     .c-img {
       background-size: cover;
@@ -76,6 +122,36 @@
       padding-top: 75%;
       position: relative;
     }
+    .imgFullScreeButton {
+      width: 15%;
+      background: #4c85ed;
+      cursor:pointer;
+        opacity: 0.7;
+        position: relative;
+        top: 23px;
+        color: white;
+        border: 0;
+        z-index: 1;
+
+    }
+    
+    .imgFullScreeButton:focus{outline:0;}
+
+    .imgFullScreeButtonExit {
+      display: none;
+      width: 15%;
+      background: #4c85ed;
+      cursor:pointer;
+        opacity: 0.7;
+        position: relative;
+        top: 23px;
+        color: white;
+        border: 0;
+        z-index: 1;
+
+    }
+    
+    .imgFullScreeButtonExit:focus{outline:0;}
     .c-img video {
       position: absolute;
       left: 0;
@@ -196,6 +272,7 @@
     .detail-con .resource-con {
       margin: 0 auto;
       width: 100%;
+      z-index: 1
     }
     .carousel-items {
       position: relative;
@@ -204,6 +281,7 @@
       }
     }
   }
+
 
 }
 

@@ -23,22 +23,44 @@ interface State {
   locale: string
 }
 export default class App extends React.Component<{}, State>{
+
+  getLocaleLaunguage(){
+    var language = "en_US";
+    var jsSrc =(navigator.language).toLowerCase();
+    console.info("locale launguage: " + jsSrc);
+  
+    if(jsSrc == "zh-cn"){
+      language = "zh_CN"
+    }else if(jsSrc == "en_us"){
+      language = "en_US"
+    }else if(jsSrc == "ja_jp"){
+      language = "ja_JP"
+    }else if (jsSrc == "ru_ru"){
+      language = "ru_RU"
+    }
+    return language;
+  }
+  
   constructor(props: any){
     super(props);
+   
     this.state = {
-      locale: 'en_US'
+      locale: this.getLocaleLaunguage()
     }
   }
 
+  
+
   componentDidMount(){
-    const locale = Cookies.get('lang') || 'en_US';
+    
+    const locale = Cookies.get('lang') || this.getLocaleLaunguage();
     this.setState({
       locale: locale
     });
     localStorage.setItem('messages', JSON.stringify(messages[locale]))
   }
 
-  changeLanusge = (locale = 'en_US'): void => {
+  changeLanusge = (locale = this.getLocaleLaunguage()): void => {
     this.setState({
       locale: locale
     });

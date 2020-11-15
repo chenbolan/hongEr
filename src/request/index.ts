@@ -4,7 +4,7 @@ export const requestUrl = {
   registerUrl: '/EmailRegister/register',
   boothLayoutUrl: '/boothLayout/json',
   boothLayoutUrlHeader: '/boothLayout/headerjson',
-  detail: '/boothLayout/detail',
+  detail: '/boothLayout/frontDetail',
   getCategoryByExhibitorId: '/front/getCategoryByExhibitorId',
   listByCatIdAndExhibitorId: '/front/listByCatIdAndExhibitorId',
   linkCustomServiceUrl: '/front/addFirend',

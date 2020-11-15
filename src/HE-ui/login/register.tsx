@@ -123,6 +123,28 @@ export default class Register extends React.Component<Props, State> {
               <Input.Password placeholder={messages.remind5} />
             </Form.Item>
 
+            <Form.Item
+              label={messages.companyName}
+              name="companyName"
+              rules={[{ required: true, message: messages.remind9 }]}
+            >
+              <Input placeholder={messages.remind9} />
+            </Form.Item>
+            <Form.Item
+              label={messages.country}
+              name="country"
+              rules={[{ required: true, message: messages.remind7 }]}
+            >
+              <Input placeholder={messages.remind7} />
+            </Form.Item>
+            <Form.Item
+              label={messages.wantBuyProduct}
+              name="wantBuyProduct"
+              rules={[{ required: true, message: messages.remind8 }]}
+            >
+              <Input placeholder={messages.remind8} />
+            </Form.Item>
+
             <Form.Item {...tailLayout}>
               <div className="d-flex to-reg-con">
                 <div className="flex-grow-1">

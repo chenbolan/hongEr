@@ -21,6 +21,14 @@
     <script type="text/javascript" src="./mapplic/jquery.mousewheel.js"></script>
     <script src="./mapplic/mapplic.js"></script>
     <script>
+      function haveDisplay(linkUrl){
+        window.open(linkUrl,"_blank");
+      }
+      function haveNotDisplay(text){
+        $("#haveNoDisplayDiv").text(text);
+        $("#haveNoDisplayDiv").css("display","");
+        $('#haveNoDisplayDiv').delay(3000).hide(0);
+      }
       function init(dataStr){
         var mapplic = $('#mapplic').mapplic({
           source: dataStr,
@@ -31,10 +39,18 @@
         });
       }
       window.init = init;
+    
     </script>
     <style>
       .mapplic-list-location {
         display:none;
+      }
+      .alert-danger {
+        border-radius: 4px;
+        color:#a94442;
+        background-color: #f2dede;
+        border-color: #ebccd1;
+
       }
 
     </style>
@@ -51,6 +67,9 @@
   </head>
   <body>
     <noscript>You need to enable JavaScript to run this app.</noscript>
+
+    <div class="alert alert-danger" id="haveNoDisplayDiv" style="display:none;z-index:999999;position: fixed;width: 200px;height:30px;line-height:30px;text-align:center;left:600px;top:10px;"></div>
+
     <div id="root"></div>
     <!--
       This HTML file is a template.

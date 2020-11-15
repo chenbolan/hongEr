@@ -41,6 +41,22 @@ export class _Header extends React.Component<Props, State> {
   regRef: any;
   logRef: any;
 
+  getLocaleLaunguage(){
+    var language = "en_US";
+    var jsSrc =(navigator.language).toLowerCase();
+    console.info("locale launguage: " + jsSrc);
+  
+    if(jsSrc == "zh-cn"){
+      language = "zh_CN"
+    }else if(jsSrc == "en_us"){
+      language = "en_US"
+    }else if(jsSrc == "ja_jp"){
+      language = "ja_JP"
+    }else if (jsSrc == "ru_ru"){
+      language = "ru_RU"
+    }
+    return language;
+  }
   constructor(props: any){
     super(props);
     this.state={
@@ -61,9 +77,9 @@ export class _Header extends React.Component<Props, State> {
   componentDidMount(){
     this.isLogin();
     this.getHeaderUrl();
-    const locale = Cookies.get('lang') || 'en_US';
+    const locale = Cookies.get('lang') || this.getLocaleLaunguage();
     if(Cookies.get('lang')==undefined){
-      Cookies.set("lang","en_US");
+      Cookies.set("lang", this.getLocaleLaunguage());
     }
 
     this.setState({
@@ -114,10 +130,11 @@ export class _Header extends React.Component<Props, State> {
   }
 
   renderMenu = () => {
+    const {detail} = this.state;
     const {messages} = this.props;
     return (<Menu mode="horizontal" onClick={this.handleClick} selectedKeys={[this.state.menuKey]}>
-      <Menu.Item key={MenuType.Menu1} onClick={this.toIndex}>
-        {messages.menu1}
+      <Menu.Item onClick={this.toIndex}>
+      {detail?.homeTitle}
       </Menu.Item>
       <Menu.Item onClick={() => {this.togglePop(true)}}>
       {messages.menu2}
@@ -170,7 +187,7 @@ export class _Header extends React.Component<Props, State> {
     const _this = this;
     const host = "https://" + window.location.host;
     if(Cookies.get('lang')==undefined){
-      Cookies.set("lang","en_US");
+      Cookies.set("lang",this.getLocaleLaunguage());
     }
     const url = requestUrl.boothLayoutUrlHeader + "?lang=" + Cookies.get("lang")
     request(url, {domainUrl: host}).then((data) => {
@@ -211,6 +228,7 @@ export class _Header extends React.Component<Props, State> {
         _this.setState({
           detail: data.data
         });
+        Cookies.set("svgUrl",data.data.svgUrl);
       } else {
         message.error(data.message)
       }
@@ -253,6 +271,7 @@ export class _Header extends React.Component<Props, State> {
   }
 
   render() {
+    
     const { messages } = this.props;
     const { loginUrl, exhibitionDesc, lanuage, exhibitionTitle } = this.state;
     return <div className="he-header conten-p-l conten-p-r">

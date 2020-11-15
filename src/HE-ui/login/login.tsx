@@ -61,6 +61,11 @@ export class _Login extends React.Component<Props & ExtProps, State> {
     this.toggleLoginPop(false);
     this.props.showRegister();
   }
+  forgetPassword = () => {
+    var host = "https://" + window.location.host;
+    const href  = host + "/vm/pages/front/forgetPassword.html";
+    window.open(href,"_blank")
+  }
 
   onFinishFailed = (errorInfo : any) => {
     console.log('Failed:', errorInfo);
@@ -118,6 +123,7 @@ export class _Login extends React.Component<Props & ExtProps, State> {
 
           <Form.Item {...tailLayout} name="remember" valuePropName="checked">
             <Checkbox>{messages.remember}</Checkbox>
+            
           </Form.Item>
 
           <Form.Item {...tailLayout}>
@@ -128,6 +134,9 @@ export class _Login extends React.Component<Props & ExtProps, State> {
               </div>
               <Button type="primary" htmlType="submit">
                 {messages.login}
+              </Button>
+              <Button type="primary" className="forgetPassword" onClick={this.forgetPassword}>
+              {messages.forgetPassword}
               </Button>
             </div>
           </Form.Item>

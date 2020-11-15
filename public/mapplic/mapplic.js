@@ -7,7 +7,7 @@
 ;(function($) {
 	"use strict";
 	 var messages = localStorage.getItem('messages')
-	 var productDetail = "Product Details"
+	 var productDetail = "Enter"
 	 if(messages != null && messages != undefined){
 		var messagesJsonObj = eval('(' + messages + ')');
 		productDetail = messagesJsonObj["productDetail"]
@@ -140,7 +140,7 @@
 				this.title = $('<h4></h4>').addClass('mapplic-tooltip-title').appendTo(this.body);
 				this.content = $('<div></div>').addClass('mapplic-tooltip-content').appendTo(this.body);
 				this.desc = $('<div></div>').addClass('mapplic-tooltip-description').appendTo(this.content);
-				this.link = $('<a>' + self.loc.more + '</a>').addClass('mapplic-popup-link').attr('href', '#').attr('target','_blank').hide().appendTo(this.body);
+				this.link = $('<a>' + self.loc.more + '</a>').addClass('mapplic-popup-link').attr('href', '#').hide().appendTo(this.body);
 				if (self.o.linknewtab) this.link.attr('target', '_blank');
 				this.triangle = $('<div></div>').addClass('mapplic-tooltip-triangle').prependTo(this.wrap);
 
@@ -730,6 +730,7 @@
 
 				this.input = $('<input>').attr({'type': 'text', 'spellcheck': 'false', 'placeholder': self.loc.search}).addClass('mapplic-search-input').keyup(function(e) {
 					s.search();
+					// $(".mapplic-list-category-folder").hide();
 					if (e.keyCode == 13) $('li > a', s.el).filter(':visible:first').click();
 				});
 				if (self.o.search) this.input.prependTo(this.filter);
@@ -760,6 +761,8 @@
 					tag.remove();
 					delete s.taglist[item.id];
 					s.search();
+					$(".mapplic-list-category-folder").show();
+					$(".mapplic-list-category").hide();
 				}).appendTo(tag);
 
 				s.taglist[item.id] = true;
@@ -779,17 +782,99 @@
 
 			this.addCategories = function(categories) {
 				var s = this;
+				/*****二级分类*****/
+				if (categories) {
+					var allfolders = [];
+					var folders = [];
+					$.each(categories, function(index, category) {
+						allfolders.push(category.folder);
+					});
+
+					for(var i=0;i<allfolders.length;i++)
+						{
+						    if(allfolders.indexOf(allfolders[i])==i)
+						    {
+						    	folders.push(allfolders[i]);
+						    }
+						}
+				}
+
+				
+
+				
+				/*****二级分类结束******/
 				var expandable = $('<li></li>').addClass('mapplic-list-expandable'),
 					expandablelist = $('<ol></ol>').appendTo(expandable);
 
 				this.list.append(expandable);
 
 				if (categories) {
+					var folderCount = 0;
+					var currentFolderIndex = 0;
+					var currentFolder = folders[0];
 					$.each(categories, function(index, category) {
+						// var categoryFolders = $('<li></li>').addClass('mapplic-list-folders')
+						// var categoryFoldersList = $('<ol></ol>').appendTo(categoryFolders);
+						// this.list.append(categoryFolders);
+						// for(var i=0; i< folders.length;i++){
+						
+							if(currentFolder == category.folder  && folderCount == 0){
+								var tmpFolder = currentFolder;
+								// var index = "folderIndex" + i ;
+								var item2 = $('<li></li>').addClass('mapplic-list-category-folder').attr('data-category-folder', tmpFolder);
+											var link2 = $('<a></a>').attr('href', '#').prependTo(item2);
+											var title2 = $('<h4 style="margin:0 auto"></h4').text(tmpFolder).appendTo(link2);
+								
+								// item2.appendTo(categoryFoldersList)
+								link2.on('click', {tfolder:tmpFolder}, function(e) {
+												e.preventDefault();
+
+												$(".folder-" + e.data.tfolder).toggle();
+												//非此类的都关闭
+												for(var i=0; i< folders.length;i++){
+													if(folders[i] != e.data.tfolder){
+														$(".folder-" + folders[i]).css('display','none');
+													}
+												}
+												
+											});
+								item2.appendTo(expandablelist);
+							// }
+							}else if(currentFolder != category.folder){
+								folderCount = 0;
+								currentFolder = category.folder;
+								var tmpFolder = currentFolder;
+								// var index = "folderIndex" + i ;
+								var item2 = $('<li></li>').addClass('mapplic-list-category-folder').attr('data-category-folder', tmpFolder);
+											var link2 = $('<a></a>').attr('href', '#').prependTo(item2);
+											var title2 = $('<h4 style="margin:0 auto"></h4').text(tmpFolder).appendTo(link2);
+								
+								// item2.appendTo(categoryFoldersList)
+								link2.on('click', {tfolder:tmpFolder}, function(e) {
+												e.preventDefault();
+
+												$(".folder-" + e.data.tfolder).toggle();
+												//非此类的都关闭
+												for(var i=0; i< folders.length;i++){
+													if(folders[i] != e.data.tfolder){
+														$(".folder-" + folders[i]).css('display','none');
+													}
+												}
+												
+											});
+								item2.appendTo(expandablelist);
+							}
+
+							folderCount++;
+
+							
+
+
 						category.nr = 0;
+						var folderClass = "folder-" + category.folder;
 
 						if (!(category.hide == 'true')) {
-							var item = $('<li></li>').addClass('mapplic-list-category').attr('data-category', category.id);
+							var item = $('<li></li>').addClass('mapplic-list-category').addClass(folderClass).attr('data-category', category.id);
 							var link = $('<a></a>').attr('href', '#').prependTo(item);
 
 							var thumbnail = null;
@@ -801,9 +886,9 @@
 							var title = $('<h4></h4').text(category.title).appendTo(link);
 							if (!category.about) title.addClass('mapplic-margin');
 							category.count = $('<span></span>').text('(0)').addClass('mapplic-list-count').appendTo(title);
-
+							
 							if (category.about) $('<span></span>').addClass('mapplic-about').html(category.about).appendTo(link);
-
+							
 							var toggle = self.legend.newToggle(category)
 							if (toggle) toggle.appendTo(item);
 
@@ -813,14 +898,18 @@
 								else {
 									s.input.val('');
 									s.addTag(category);
+									$(".mapplic-list-category-folder").hide();
 								}
 							});
 
 							category.list = item;
+							
 							item.appendTo(expandablelist);
 						}
 					});
 				}
+
+			
 			}
 
 			this.countCategory = function() {
@@ -1531,6 +1620,10 @@
 								toload--;
 								if (toload == 0) mapReady();
 							}).appendTo(layer);
+							//替换掉image中的url
+							// var images = $("image")
+							// var imagesLength = images.length;
+							// alert('image length' + imagesLength);
 							break;
 
 						// others
@@ -1963,6 +2056,15 @@
 			});
 
 			if (self.sidebar) self.sidebar.countCategory();
+
+			var images = $("image");
+	        var imagesLength = images.length;
+			for(var i=0; i < imagesLength; i++){
+				  var oldhref = images[i].getAttributeNS('http://www.w3.org/1999/xlink','href');
+				  var svgUrl = self.getCookie("svgUrl");
+				  var newUrl = "https://fairsroom.com/download/" + svgUrl.substr(0,svgUrl.lastIndexOf("/")) + "/" + oldhref;
+          		  images[i].setAttributeNS('http://www.w3.org/1999/xlink', 'xlink:href', newUrl);
+        	}
 		}
 
 		self.getLocationData = function(id) {
@@ -2078,6 +2180,14 @@
 					left = location.x * 100;
 				location.el.css({'top': top + '%', 'left': left + '%'});
 			}
+		}
+		self.getCookie = function(name) { 
+			var arr,reg=new RegExp("(^| )"+name+"=([^;]*)(;|$)");
+			if(arr=document.cookie.match(reg)){
+				return unescape(arr[2]); 
+			}else{
+				return null;
+			}       
 		}
 
 	};

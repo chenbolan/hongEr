@@ -3,6 +3,38 @@
  * Version 6.0
  * https://www.mapplic.com/
  */
+ .mapplic-list-location {
+	display: none;
+}
+ .mapplic-list-category {
+	display: none;
+}
+.mapplic-list-category-folder{
+	height: auto;
+   line-height: 50px;
+   font-size: 12px;
+   background-color: #cccccc;
+   padding-left: 20px !important;
+	   border-bottom: solid 1px #cccccc;
+   background-color: #ffffff !important;
+}
+
+.mapplic-list-category-folder:first-child{
+   margin: 0 auto !important;
+   margin-top: 0.9em !important;
+}
+
+
+.mapplic-list-category-folder-two{
+	height: 50px;
+   line-height: 50px;
+   font-size: 12px;
+   background-color: #cccccc;
+   padding-left: 20px !important;
+	   border-bottom: solid 1px #cccccc;
+   background-color: #ffffff !important;
+}
+
 
 /* STYLES */
 .mapplic-element {
